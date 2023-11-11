@@ -2,6 +2,9 @@
 
 Faceti clone la gitu asta
 
-- cd .\kickoffpicks\frontend\
-- npm install
-- npm start
+- `cd .\kickoffpicks\frontend\`
+- `npm install`
+- `npm start`
+
+  ![image](https://github.com/BRA-Team/kick-off-picks/assets/126898116/4ced00d2-8224-477a-ac4d-c004bd06b64f)
+
