@@ -8,10 +8,11 @@ import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import SportsIcon from '@mui/icons-material/Sports';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 
 function Copyright(props) {
   return (
@@ -52,11 +53,11 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
+            <SportsIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -89,7 +90,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
               <Grid item xs>
@@ -99,7 +100,7 @@ export default function SignIn() {
               </Grid>
               <Grid item>
               <Link to="/signup" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  {"Don't have an account? Sign Up"}
+                  {"Don't have an account? Register"}
                 </Link>
               </Grid>
             </Grid>
