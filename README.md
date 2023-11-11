@@ -1,11 +1,12 @@
 # KickOffPicks - IS Project 2023
 
-radu
 Faceti clone la gitu asta
 
 - `cd .\kickoffpicks\frontend\`
 - `npm install`
 - `npm start`
+
+
 
 Close the Issue using special keywords
 
