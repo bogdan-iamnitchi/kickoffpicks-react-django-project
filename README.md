@@ -1,4 +1,5 @@
 # KickOffPicks - IS Project 2023
+
 Test
 Faceti clone la gitu asta
 
@@ -8,5 +9,4 @@ Faceti clone la gitu asta
 
 Close the Issue using special keywords
 
-  ![image](https://github.com/BRA-Team/kick-off-picks/assets/126898116/4ced00d2-8224-477a-ac4d-c004bd06b64f)
-
+![image](https://github.com/BRA-Team/kick-off-picks/assets/126898116/4ced00d2-8224-477a-ac4d-c004bd06b64f)
