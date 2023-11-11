@@ -8,19 +8,17 @@ import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import SportsIcon from '@mui/icons-material/Sports';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import backgroundImage from './images/background.jpg';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
+    <Typography variant="body2" color="white" align="center" {...props}>
+      {'BRA '}
+            {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
@@ -42,10 +40,11 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="false" sx={{ height: '110vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <CssBaseline />
         <Box
           sx={{
+            width: '70vh',
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
@@ -53,11 +52,20 @@ export default function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <SportsIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+          <Typography
+  component="h1"
+  variant="h5"
+  color="white"
+  sx={{
+    fontFamily: 'Helvetica, Arial, sans-serif',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+  }}
+>
+  Register
+</Typography>
+
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -67,8 +75,10 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="firstName"
-                  label="Prenume"
+                  label="First Name"
                   autoFocus
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -76,9 +86,11 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Nume"
+                  label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,9 +98,11 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Adresa de Mail"
+                  label="Email"
                   name="email"
                   autoComplete="email"
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -96,16 +110,45 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Parola"
+                  label="Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Confirm Password"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
+                />
+              </Grid>
+            
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="country"
+                  label="Country"
+                  id="country"
+                  autoComplete="country"
+                  InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="Sunt de acord sa primesc notificari si email-uri de la acest website."
+                  control={<Checkbox value="remember" color="primary" style={{ color: 'white' }} />}
+                  label={<Typography style={{ color: 'white',maxWidth: '40ch', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>I agree to receive notifications and emails from this website.</Typography>}
+                  
                 />
               </Grid>
             </Grid>
@@ -115,12 +158,12 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/signin" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  Ai deja un cont? Sign in
+                  Ai deja un cont? Login
                 </Link>
               </Grid>
             </Grid>

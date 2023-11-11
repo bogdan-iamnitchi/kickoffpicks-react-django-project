@@ -5,28 +5,23 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import SportsIcon from '@mui/icons-material/Sports';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import backgroundImage from './images/background.jpg';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
+    <Typography variant="body2" color="white" align="center" {...props}>
+      {'BRA '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
   );
 }
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -42,23 +37,34 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="false" sx={{ height: '100vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <CssBaseline />
         <Box
           sx={{
+            width: '50vh',
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
+            <SportsIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h5" color="white">
+            Login
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              mt: 1,
+              padding: '20px',
+              backgroundColor: 'rgba(96, 96, 96, 0.5)',
+              borderRadius: '10px',
+            }}
+          >
             <TextField
               margin="normal"
               required
@@ -68,7 +74,14 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              InputLabelProps={{
+                style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' },
+              }}
+              InputProps={{
+                style: { color: 'white', borderColor: 'white' },
+              }}
             />
+
             <TextField
               margin="normal"
               required
@@ -78,31 +91,50 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              control={<Checkbox value="remember" color="primary" style={{ color: 'white' }} />}
+              label={<Typography style={{ color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>Remember me</Typography>}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-              <Link to="/signup" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
+           <Button
+  type="submit"
+  fullWidth
+  variant="contained"
+  sx={{ mt: 3, mb: 2 }}
+>
+  Login
+</Button>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
+          <Link
+            href="#"
+            variant="body2"
+            style={{
+              textDecoration: 'none',
+              color: '#FFFFFF',
+              fontWeight: 100,
+              
+            }}
+          >
+            Forgot password?
+          </Link>
+          <Link
+            to="/signup"
+            variant="body2"
+            style={{
+              textDecoration: 'none',
+              color: '#FFFFFF',
+              marginTop: '8px',
+              ':hover': {
+                textDecoration: 'underline',
+              },
+            }}
+          >
+            {"Don't have an account? Register"}
+          </Link>
+        </Box>
+
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
