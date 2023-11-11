@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
+import './stiles/link.css';
 
 function Copyright(props) {
   return (
@@ -157,12 +158,13 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              className="link" // Apply the link class to the button
             >
               Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to="/signin" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
+                <Link to="/signin" variant="body2" className="link"> {/* Apply the link class to the Link */}
                   Ai deja un cont? Login
                 </Link>
               </Grid>
@@ -174,3 +176,9 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+
+
+
+
+

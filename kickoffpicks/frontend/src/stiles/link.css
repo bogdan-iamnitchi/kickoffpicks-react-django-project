@@ -1,0 +1,12 @@
+.link {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-weight: 100;
+  }
+  
+  .link:hover {
+    background-color: blue;
+    color: aliceblue;
+    text-decoration: underline;
+  }
+  
