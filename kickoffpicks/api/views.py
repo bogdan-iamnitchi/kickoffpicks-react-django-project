@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework import generics, status
+from .serializers import RoomSerializer
+from .models import Room
 
-
-def get_routes(request):
-    return JsonResponse("MAMAMAM CE TARE", safe=False)
+class RoomView(generics.ListAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer

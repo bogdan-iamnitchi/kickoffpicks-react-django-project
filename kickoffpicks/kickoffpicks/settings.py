@@ -39,10 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'api.apps.ApiConfig',
-    
     'corsheaders',
+    'rest_framework',
     
+    'api.apps.ApiConfig',
     
 ]
 
@@ -94,6 +94,7 @@ DATABASES = {
         'PASSWORD': '*6D5FaGAFA3E11G6DG24DC63b2DgafA2',
         'HOST': 'monorail.proxy.rlwy.net',
         'PORT': '14304',
+        
     }
 }
 
