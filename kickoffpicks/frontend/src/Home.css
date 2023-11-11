@@ -1,0 +1,12 @@
+.GameModes{
+    height: 300px;
+    Width:80vh ;
+    margin-left: -8px;
+    margin-right: -8px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    background-color: red;
+}
