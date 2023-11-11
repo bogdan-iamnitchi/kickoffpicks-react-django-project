@@ -1,2 +1,7 @@
 # KickOffPicks - IS Project 2023
-This is our final project repo
+
+Faceti clone la gitu asta
+
+- cd .\kickoffpicks\frontend\
+- npm install
+- npm start
