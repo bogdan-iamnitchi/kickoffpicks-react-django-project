@@ -1,6 +1,5 @@
 # KickOffPicks - IS Project 2023
 
-Test
 Faceti clone la gitu asta
 
 - `cd .\kickoffpicks\frontend\`
