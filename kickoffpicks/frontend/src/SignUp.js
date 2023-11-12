@@ -18,14 +18,17 @@ import logo from './images/logo.png';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="white" align="center" {...props}>
-      {'BRA '}
-            {new Date().getFullYear()}
+      {'Copyright © '}
+      {new Date().getFullYear()}
       {'.'}
       <br />
-      <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', marginTop: '10px', borderRadius: '50%' }} />
+      <a href="https://github.com/BRA-Team">
+        <img src={logo} alt="Logo" style={{ width: '180px', height: '50px', marginTop: '10px'}} />
+      </a>
     </Typography>
   );
 }
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -43,7 +46,7 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-    <Container component="main" maxWidth="false" sx={{ height: '120vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container component="main" maxWidth="false" sx={{ height: '120vh', background: 'linear-gradient(76.8deg, rgb(121,45,129) 3.6%, rgb(36,31,98) 90.4%)', backgroundSize: 'cover',display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
         <CssBaseline />
         <Box
           sx={{

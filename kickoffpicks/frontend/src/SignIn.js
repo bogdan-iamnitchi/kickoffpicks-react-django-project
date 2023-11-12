@@ -20,11 +20,13 @@ import "./stiles/link.css";
 function Copyright(props) {
   return (
     <Typography variant="body2" color="white" align="center" {...props}>
-      {'BRA '}
+      {'Copyright © '}
       {new Date().getFullYear()}
       {'.'}
       <br />
-      <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', marginTop: '10px', borderRadius: '50%' }} /> {/* Include your logo here */}
+      <a href="https://github.com/BRA-Team">
+        <img src={logo} alt="Logo" style={{ width: '180px', height: '50px', marginTop: '10px'}} />
+      </a>
     </Typography>
   );
 }
@@ -43,8 +45,7 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="false" sx={{ height: '100vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <CssBaseline />
+<Container component="main" maxWidth="false" sx={{ height: '120vh', background: 'linear-gradient(76.8deg, rgb(121,45,129) 3.6%, rgb(36,31,98) 90.4%)', backgroundSize: 'cover',display: 'flex', flexDirection: 'column',alignItems: 'center'}}>        <CssBaseline />
         <Box
           sx={{
             width: '50vh',
