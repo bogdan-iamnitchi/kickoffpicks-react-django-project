@@ -6,7 +6,17 @@ Faceti clone la gitu asta
 - `npm install`
 - `npm start`
 
+Fiecare de acum are branch-ul lui
 
+- backend-bog
+- frontend-radu
+- frontend-alex
+
+Cand avem chesti gata facute:
+
+- facem un pull request sa unim cu main
+- rezolvam eventualele conflicte ce apar
+- ne tragem local tot ce e pe main si testam
 
 Close the Issue using special keywords
 
