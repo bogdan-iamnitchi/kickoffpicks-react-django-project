@@ -23,7 +23,23 @@ class RoomView(APIView):
             return Response({"Error": "Rooms not found..."}, status=status.HTTP_404_NOT_FOUND)
 
         
+class GetRoom(APIView):
+    serializer_class = RoomSerializer
+    lookup_url_kwarg = 'code'
+    
+    def get(self, request, format=None):
+        code = request.GET.get(self.lookup_url_kwarg)
+        if code != None:
+            queryset = Room.objects.filter(code=code)
+            if len(queryset) > 0:
+                room = queryset[0]
+                data = RoomSerializer(room).data
+                data['is_host'] = self.request.session.session_key == room.host
+                return Response(data, status=status.HTTP_200_OK)
+            return Response({"Room Not Found": "Invalid room code."}, status=status.HTTP_404_NOT_FOUND)
         
+        return Response({"Bad Request":"Code parameter not found in request."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CreateRoom(APIView):
     serializer_class = CreateRoomSerializer
@@ -37,3 +53,21 @@ class CreateRoom(APIView):
             return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
         else:
             return Response({"Error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class JoinRoom(APIView):
+    lookup_url_kwarg = 'code'
+    
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+            
+        code = request.data.get(self.lookup_url_kwarg)
+        if code != None:
+            queryset = Room.objects.filter(code=code)
+            if len(queryset) > 0:
+                self.request.session["room_code"] = code
+                return Response({"message" : "Room Joined!"}, status=status.HTTP_200_OK)
+            return Response({"Room Not Found": "Invalid room code."}, status=status.HTTP_404_NOT_FOUND) 
+            
+        return Response({"Bad Request":"Code parameter not found in request."}, status=status.HTTP_400_BAD_REQUEST)

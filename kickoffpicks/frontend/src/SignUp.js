@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,16 +12,23 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
+import './stiles/link.css';
+import logo from './images/logo.png';
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="white" align="center" {...props}>
-      {'BRA '}
-            {new Date().getFullYear()}
+      {'Copyright © '}
+      {new Date().getFullYear()}
       {'.'}
+      <br />
+      <a href="https://github.com/BRA-Team">
+        <img src={logo} alt="Logo" style={{ width: '180px', height: '50px', marginTop: '10px'}} />
+      </a>
     </Typography>
   );
 }
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -40,7 +46,7 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-    <Container component="main" maxWidth="false" sx={{ height: '110vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container component="main" maxWidth="false" sx={{ height: '120vh', background: 'linear-gradient(76.8deg, rgb(121,45,129) 3.6%, rgb(36,31,98) 90.4%)', backgroundSize: 'cover',display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
         <CssBaseline />
         <Box
           sx={{
@@ -66,7 +72,17 @@ export default function SignUp() {
   Register
 </Typography>
 
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+<Box
+  component="form"
+  noValidate
+  onSubmit={handleSubmit}
+  sx={{
+    mt: 3,
+    backgroundColor: 'rgba(96, 96, 96, 0.5)', // Add background color here
+    padding: '20px',
+    borderRadius: '10px',
+  }}
+>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -157,13 +173,14 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              className="link" // Apply the link class to the button
             >
               Register
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
-                <Link to="/signin" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  Ai deja un cont? Login
+              <Link to="/signin" variant="body2" className="link" >
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>
@@ -174,3 +191,9 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+
+
+
+
+
