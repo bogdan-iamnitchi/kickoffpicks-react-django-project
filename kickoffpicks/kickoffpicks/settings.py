@@ -89,11 +89,11 @@ WSGI_APPLICATION = 'kickoffpicks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': '*6D5FaGAFA3E11G6DG24DC63b2DgafA2',
-        'HOST': 'monorail.proxy.rlwy.net',
-        'PORT': '14304',
+        'NAME': 'kickOffPicks_db',
+        'USER': 'kickOffPicks_user',
+        'PASSWORD': '1q2w3e4r',
+        'HOST': 'localhost',
+        'PORT': '5432',
         
     }
 }
