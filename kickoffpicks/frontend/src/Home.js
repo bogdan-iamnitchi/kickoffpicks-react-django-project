@@ -11,8 +11,8 @@ const GameModes = () => {
 
 export default function HomeExport() {
   return (
-    <div>
+    <body>
       <Navbar />
-    </div>
+    </body>
   );
 }

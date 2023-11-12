@@ -4,20 +4,20 @@
     margin-left: -8px;
     margin-right: -8px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     font-family: sans-serif;
-    background-color: black;
+    background-color: inherit;
 }
 
 .navbar ul{
-    margin: 0;
     padding: 0;
     display: flex;
+    list-style-type: none;
 }
 
 .navbar ul li a{
-    color: green;
+    color: white;
     font-size: 20px;
     text-decoration: none;
     text-transform: uppercase;
@@ -28,7 +28,7 @@
 }
 
 .navbar ul li a:hover{
-    background-color: greenyellow;
+    background-color: magenta;
     color: aliceblue;
 }
 
@@ -39,7 +39,7 @@
     left: 12px;
     height: 12px;
     width: 12px;
-    border: 3px solid greenyellow;
+    border: 3px solid white;
     border-width: 0 0 3px 3px;
     opacity: 0;
     transition: all 0.3s;
@@ -52,7 +52,7 @@
     right: 12px;
     height: 12px;
     width: 12px;
-    border: 3px solid greenyellow;
+    border: 3px solid white;
     border-width: 3px 3px 0 0;
     opacity: 0;
     transition: all 0.3s;
