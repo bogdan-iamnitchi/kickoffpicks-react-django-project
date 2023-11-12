@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     
     'api.apps.ApiConfig',
-    
+    'auth.apps.AuthConfig'
 ]
 
 CORS_ALLOWED_ORIGINS = [
