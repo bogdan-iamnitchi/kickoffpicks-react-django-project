@@ -2,6 +2,7 @@
     text-decoration: none;
     color: #FFFFFF;
     font-weight: 100;
+    transition: background-color 0.3s, color 0.3s;
   }
   
   .link:hover {

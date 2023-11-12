@@ -67,7 +67,17 @@ export default function SignUp() {
   Register
 </Typography>
 
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+<Box
+  component="form"
+  noValidate
+  onSubmit={handleSubmit}
+  sx={{
+    mt: 3,
+    backgroundColor: 'rgba(96, 96, 96, 0.5)', // Add background color here
+    padding: '20px',
+    borderRadius: '10px',
+  }}
+>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -162,10 +172,10 @@ export default function SignUp() {
             >
               Register
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
-                <Link to="/signin" variant="body2" className="link"> {/* Apply the link class to the Link */}
-                  Ai deja un cont? Login
+              <Link to="/signin" variant="body2" className="link" >
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>
