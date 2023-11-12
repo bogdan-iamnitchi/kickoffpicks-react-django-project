@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 from .models import Room
-from .serializers import RoomSerializer
 
 def get_rooms_bll(request):
     rooms = Room.objects.all()
@@ -8,6 +7,10 @@ def get_rooms_bll(request):
 
 def get_room_by_host(host):
     room = Room.objects.filter(host=host)
+    return room
+
+def get_room_by_code(code):
+    room = Room.objects.filter(code=code)
     return room
 
 def create_room_bll(request, serializer_class):

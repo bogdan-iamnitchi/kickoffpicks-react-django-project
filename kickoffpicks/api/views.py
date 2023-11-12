@@ -1,19 +1,29 @@
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, generics
 from .serializers import RoomSerializer, CreateRoomSerializer
 from .models import Room
-from .business_logic import *
+from .room_bll import *
 
-class GetRoom(APIView):
+class RoomView(APIView):
     serializer_class = RoomSerializer
-    
-    def get(self, request, format = None):
-        rooms = get_rooms_bll(request)
+
+    def get(self, request, *args, **kwargs):
+        room_code = kwargs.get('room_code')
+        
+        if room_code:
+            rooms = get_room_by_code(room_code)
+        else:
+            rooms = get_rooms_bll(request)
+        
         if len(rooms) > 0:
             return Response(RoomSerializer(rooms, many=True).data, status=status.HTTP_200_OK)
         else:
             return Response({"Error": "Rooms not found..."}, status=status.HTTP_404_NOT_FOUND)
+
+        
+        
 
 class CreateRoom(APIView):
     serializer_class = CreateRoomSerializer
