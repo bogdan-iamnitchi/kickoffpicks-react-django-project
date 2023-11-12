@@ -27,12 +27,12 @@
     transition: 0.5s;
 }
 
-a:hover{
+.navbar ul li a:hover{
     background-color: greenyellow;
     color: aliceblue;
 }
 
-a::before{
+.navbar ul li a::before{
     content: "";
     position: absolute;
     bottom: 12px;
@@ -45,7 +45,7 @@ a::before{
     transition: all 0.3s;
 }
 
-a::after{
+.navbar ul li a::after{
     content: "";
     position: absolute;
     top: 12px;
@@ -58,13 +58,13 @@ a::after{
     transition: all 0.3s;
 }
 
-a:hover::before{
+.navbar ul li a:hover::before{
     opacity: 1;
     bottom: -8px;
     left: -8px;
 }
 
-a:hover::after{
+.navbar ul li a:hover::after{
     opacity: 1;
     top: -8px;
     right: -8px;
