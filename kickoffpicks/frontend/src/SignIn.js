@@ -12,6 +12,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
+import "./stiles/link.css";
+
+
 
 function Copyright(props) {
   return (
@@ -99,41 +102,33 @@ export default function SignIn() {
               label={<Typography style={{ color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>Remember me</Typography>}
             />
            <Button
-  type="submit"
-  fullWidth
-  variant="contained"
-  sx={{ mt: 3, mb: 2 }}
->
-  Login
-</Button>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center',textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
-          <Link
-            href="#"
-            variant="body2"
-            style={{
-              textDecoration: 'none',
-              color: '#FFFFFF',
-              fontWeight: 100,
-              
-            }}
-          >
-            Forgot password?
-          </Link>
-          <Link
-            to="/signup"
-            variant="body2"
-            style={{
-              textDecoration: 'none',
-              color: '#FFFFFF',
-              marginTop: '8px',
-              ':hover': {
-                textDecoration: 'underline',
-              },
-            }}
-          >
-            {"Don't have an account? Register"}
-          </Link>
-        </Box>
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              className="link" // Apply the link class to the button
+            >
+              Login
+            </Button>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Link
+                href="#"
+                variant="body2"
+                className="link" // Apply the link class to the Link
+              >
+                Forgot password?
+              </Link>
+              <Link
+                to="/signup"
+                variant="body2"
+                className="link" // Apply the link class to the Link
+                style={{
+                  marginTop: '8px',
+                }}
+              >
+                {"Don't have an account? Register"}
+              </Link>
+            </Box>
 
           </Box>
         </Box>
