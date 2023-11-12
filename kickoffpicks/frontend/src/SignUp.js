@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
+import './stiles/link.css';
 
 function Copyright(props) {
   return (
@@ -66,7 +66,17 @@ export default function SignUp() {
   Register
 </Typography>
 
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+<Box
+  component="form"
+  noValidate
+  onSubmit={handleSubmit}
+  sx={{
+    mt: 3,
+    backgroundColor: 'rgba(96, 96, 96, 0.5)', // Add background color here
+    padding: '20px',
+    borderRadius: '10px',
+  }}
+>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -157,13 +167,14 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              className="link" // Apply the link class to the button
             >
               Register
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
-                <Link to="/signin" variant="body2" style={{ textDecoration: 'underline', color: '#347aeb' }}>
-                  Ai deja un cont? Login
+              <Link to="/signin" variant="body2" className="link" >
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>
