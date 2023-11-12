@@ -12,7 +12,18 @@ Fiecare de acum are branch-ul lui
 - frontend-radu
 - frontend-alex
 
-Cand avem chesti gata facute:
+Ca sa aveti si voi branchu care e remote:
+
+- `git fetch`
+- `git checkout frontend-alex / frontend-radu`
+
+Dupa ce trebuie sa faceti este:
+
+- `git add .`
+- `git commit -m "mesaj"`
+- `git push -u origin frontend-alex / frontend-radu`
+
+Cand avem chesti gata de testat:
 
 - facem un pull request sa unim cu main
 - rezolvam eventualele conflicte ce apar
