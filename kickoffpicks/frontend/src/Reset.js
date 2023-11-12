@@ -12,10 +12,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
-import logo from './images/logo.png';
 import "./stiles/link.css";
-
-
+import logo from './images/logo.png';
 
 function Copyright(props) {
   return (
@@ -24,21 +22,23 @@ function Copyright(props) {
       {new Date().getFullYear()}
       {'.'}
       <br />
-      <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', marginTop: '10px', borderRadius: '50%' }} /> {/* Include your logo here */}
+      <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', marginTop: '10px', borderRadius: '50%' }} />
     </Typography>
   );
 }
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function Reset() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get('email'),
-      password: data.get('password'),
+      newPassword: data.get('newPassword'), // Retrieve new password
+      confirmPassword: data.get('confirmPassword'), // You can add a confirm password field
     });
+    // Add logic for password reset here
   };
 
   return (
@@ -54,11 +54,11 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'red' }}>
             <SportsIcon />
           </Avatar>
           <Typography component="h1" variant="h5" color="white">
-            Login
+            Reset Password
           </Typography>
           <Box
             component="form"
@@ -92,44 +92,45 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password"
+              name="newPassword"
+              label="New Password"
               type="password"
-              id="password"
-              autoComplete="current-password"
+              id="newPassword"
+              autoComplete="new-password"
               InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
               InputProps={{ style: { color: 'white', borderColor: 'white' } }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" style={{ color: 'white' }} />}
-              label={<Typography style={{ color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}>Remember me</Typography>}
+
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
+              InputLabelProps={{ style: { color: 'white', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' } }}
+              InputProps={{ style: { color: 'white', borderColor: 'white' } }}
             />
-           <Button
+
+            <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               className="link" // Apply the link class to the button
             >
-              Login
+              Reset Password
             </Button>
+
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
               <Link
-                to="/reset"
+                to="/signin"
                 variant="body2"
                 className="link" // Apply the link class to the Link
               >
-                Forgot password?
-              </Link>
-              <Link
-                to="/signup"
-                variant="body2"
-                className="link" // Apply the link class to the Link
-                style={{
-                  marginTop: '8px',
-                }}
-              >
-                {"Don't have an account? Register"}
+                Back to Login
               </Link>
             </Box>
 

@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import backgroundImage from './images/background.jpg';
 import './stiles/link.css';
+import logo from './images/logo.png';
 
 function Copyright(props) {
   return (
@@ -20,6 +21,8 @@ function Copyright(props) {
       {'BRA '}
             {new Date().getFullYear()}
       {'.'}
+      <br />
+      <img src={logo} alt="Logo" style={{ width: '100px', height: '100px', marginTop: '10px', borderRadius: '50%' }} />
     </Typography>
   );
 }
@@ -40,7 +43,7 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-    <Container component="main" maxWidth="false" sx={{ height: '110vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container component="main" maxWidth="false" sx={{ height: '120vh', backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <CssBaseline />
         <Box
           sx={{
