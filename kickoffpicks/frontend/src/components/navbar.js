@@ -1,23 +1,21 @@
 import "../stiles/navbar.css";
-import logo from "../images/logo.jpg";
 
 const Navbar = () => {
   return (
     <div class="navbar">
-      <div class="logo"></div>
       <div>
         <ul>
           <li>
-            <a href="#">Home</a>
+            <a href="/">Home</a>
           </li>
           <li>
-            <a href="#">About</a>
+            <a href="about">About</a>
           </li>
           <li>
-            <a href="#">Rooms</a>
+            <a href="rooms">Rooms</a>
           </li>
           <li>
-            <a href="#">Competitions</a>
+            <a href="competitions">Competitions</a>
           </li>
           <li>
             <a href="signin">Log in</a>
