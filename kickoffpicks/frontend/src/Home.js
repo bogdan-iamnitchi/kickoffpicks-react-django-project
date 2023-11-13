@@ -1,18 +1,11 @@
 import Navbar from "./components/navbar";
 import "./Home.css";
 
-const GameModes = () => {
-  return (
-    <div class="GameModes">
-      <p>asdfasfdasdf</p>
-    </div>
-  );
-};
-
 export default function HomeExport() {
   return (
     <body>
       <Navbar />
+      <h1 style={{ textAlign: "center", color: "white" }}>HOME</h1>
     </body>
   );
 }
