@@ -1,5 +1,8 @@
 # KickOffPicks - IS Project 2023
 
+Backend requirements:
+ - `pip install -r requirements.txt`
+
 Faceti clone la gitu asta
 
 - `cd .\kickoffpicks\frontend\`
