@@ -39,12 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'djoser',
     'corsheaders',
     'rest_framework',
     
     'api.apps.ApiConfig',
-    'accounts.apps.AccountsConfig',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -92,21 +90,14 @@ WSGI_APPLICATION = 'kickoffpicks.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kickOffPicks_db',
-        'USER': 'kickOffPicks_user',
-        'PASSWORD': '1q2w3e4r',
+        'NAME': 'kick-off-picks-db',
+        'USER': 'kick-off-picks-app',
+        'PASSWORD': 'kickoffpicks',
         'HOST': 'localhost',
         'PORT': '5432',
         
     }
 }
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'bogdaniamnitchi.spam@gmail.com'
-EMAIL_HOST_PASWORD = 'tkwp hoed oajg rpqp'
-EMAIL_USE_TLS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -144,38 +135,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "build/static")
-]
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
-
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-}
-
-DJOSER = {
-    'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE': True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    'SEND_CONFIRMATION_EMAIL': True,
-    'SET_USERNAME_RETYPE': True,
-    'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activation/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {
-        
-    }
-}
-
-AUTH_USER_MODEL = 'accounts.UserAccount'
