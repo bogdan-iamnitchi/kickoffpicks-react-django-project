@@ -1,6 +1,14 @@
 # KickOffPicks - IS Project 2023
 
+Setup virtual enviorement:
+ - make sure you are in root project folder
+ - install virtualenv `pip install virtualenv`
+ - make your virtualenv `virtualenv .venv`
+ - to activate `.venv\Scripts\activate`
+ - (optional) to deactivate simply `deactivate` 
+
 Backend requirements:
+ - make sure .venv is active `.venv\Scripts\activate`
  - `pip install -r requirements.txt`
 
 Faceti clone la gitu asta
