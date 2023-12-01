@@ -23,7 +23,7 @@ function Copyright(props) {
       {'.'}
       <br />
       <a href="https://github.com/BRA-Team">
-        <img src={logo} alt="Logo" style={{ width: '180px', height: '50px', marginTop: '10px'}} />
+        <img src={logo} alt="Logo" style={{ width: '180px', height: '30px', marginTop: '10px'}} />
       </a>
     </Typography>
   );
