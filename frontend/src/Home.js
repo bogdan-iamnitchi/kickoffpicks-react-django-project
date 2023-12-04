@@ -5,7 +5,7 @@ export default function HomeExport() {
   return (
     <body>
       <Navbar />
-      <h1 style={{ textAlign: "center", color: "white" }}>HOME</h1>
+      <h1 style={{ textAlign: "center" }}>HOME</h1>
     </body>
   );
 }
