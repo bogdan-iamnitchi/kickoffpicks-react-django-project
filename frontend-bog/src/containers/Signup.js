@@ -41,7 +41,7 @@ const Signup = ( {signup, isAuthenticated} ) => {
 
     const continueWithGitHub= async () => {
         try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/github/?redirect_uri=${process.env.REACT_APP_API_URL}/github/`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/github/?redirect_uri=${process.env.REACT_APP_API_URL}/github`)
 
             window.location.replace(res.data.authorization_url);
         } catch (err) {
