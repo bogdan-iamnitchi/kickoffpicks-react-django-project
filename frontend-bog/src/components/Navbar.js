@@ -9,7 +9,7 @@ const Navbar = ({logout, isAuthenticated}) => {
     const [redirect, setRedirect] = useState(false);
     const logout_user = () => {
         logout();
-        //setRedirect(true);
+        setRedirect(true);
     }
 
     const guestLinks = () => (

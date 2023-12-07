@@ -11,7 +11,7 @@ const Layout = ({checkAuthenticated, load_user, children}) => {
         checkAuthenticated();
         load_user();
         
-    }, []);
+    }, [checkAuthenticated, load_user]);
 
     return (
         <div>
