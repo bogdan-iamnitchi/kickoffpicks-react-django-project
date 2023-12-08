@@ -7,7 +7,8 @@ const initialState: State = {
   access: localStorage.getItem('access') || '',
   refresh: localStorage.getItem('refresh') || '',
   isAuthenticated: false,
-  user: null
+  user: null,
+  errors: []
 }
 
 const authReducer = (state: State = initialState, action: Action) => {
@@ -49,6 +50,19 @@ const authReducer = (state: State = initialState, action: Action) => {
     case ActionType.LOGOUT:
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
+
+        if (action.type === ActionType.SIGNUP_FAIL || action.type === ActionType.LOGIN_FAIL) {
+            if(action.errors) {
+                return {
+                    ...state,
+                    isAuthenticated: false,
+                    access: null,
+                    refresh: null,
+                    errors: action.errors
+                }
+            
+            }
+        }
         return {
             ...state,
             isAuthenticated: false,
@@ -56,6 +70,8 @@ const authReducer = (state: State = initialState, action: Action) => {
             refresh: null,
             user: null
         }
+
+        
 
     case ActionType.USER_LOADED_SUCCESS:
         return {

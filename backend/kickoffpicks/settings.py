@@ -56,6 +56,8 @@ INSTALLED_APPS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://127.0.0.1:8000',
+    'http://localhost:5173',
+    'http://192.168.0.108:5173',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +80,7 @@ ROOT_URLCONF = 'kickoffpicks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(BASE_DIR, "build")],
+        'DIRS': [BASE_DIR.joinpath('../frontend-tsx/dist')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,10 +150,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    BASE_DIR.joinpath('../frontend-tsx', 'dist'),
+)
 
 #----------------------------------------------------------------LOGIN SYSTEM ----------------------------------------------------------------------
 

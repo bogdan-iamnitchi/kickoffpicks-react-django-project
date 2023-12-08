@@ -1,11 +1,12 @@
 import './global.css'
 import { Routes, Route } from 'react-router-dom'
 
-import SigninForm from './_auth/forms/SigninForm'
-import SignupForm from './_auth/forms/SignupForm'
+import { Toaster } from "@/components/ui/toaster"
+
 import AuthLayout from './_auth/AuthLayout'
-import { Home } from './_root/pages'
+import { SigninForm, SignupForm, ResetPassword, ResetPasswordConfirm, GitHub, Google, VerifyAccounut} from './_auth'
 import RootLayout from './_root/RootLayout'
+import { Home } from './_root/pages'
 
 const App = () => {
 
@@ -16,6 +17,11 @@ const App = () => {
             <Route element={<AuthLayout />}>
                 <Route path='/sign-in' element={<SigninForm />} />
                 <Route path='/sign-up' element={<SignupForm />} />
+                <Route path="/google" element={<Google />} />
+                <Route path="/github" element={<GitHub />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
+                <Route path="/activate/:uid/:token" element={<VerifyAccounut />} />
             </Route>
 
             {/* public routes*/}
@@ -23,6 +29,8 @@ const App = () => {
                 <Route index element={<Home />} />
             </Route>
         </Routes>
+
+        <Toaster />
     </main>
   )
 }

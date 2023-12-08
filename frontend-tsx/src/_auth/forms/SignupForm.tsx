@@ -1,19 +1,61 @@
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Link } from "react-router-dom"
+import * as z from "zod";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast"
 
-import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { SignupValidation } from "@/lib/validation"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/shared/Loader";
+import { SignupValidation } from "@/lib/validation";
+import { Navigate } from "react-router-dom";
 
-import { Loader } from "lucide-react"
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { actionCreators, AuthState} from "@/_state";
+import { useState } from "react";
 
- 
+
 const SignupForm = () => {
 
   const isLoading = false;
+
+  const [accountCreated, setAccountCreated] = useState(false);
+  const { toast } = useToast()
+
+  //------------------------------------------------------------------------------
+
+  const dispatch = useDispatch();
+  const { signup, load_user } = bindActionCreators(actionCreators, dispatch);
+
+  const state = useSelector((state: AuthState) => state.authState);
+  const { isAuthenticated, errors } = state;
+
+  //------------------------------------------------------------------------------
+
+  const continueWithGoogle = async () => {
+    try {
+        const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${import.meta.env.VITE_APP_API_URL}/google`)
+
+        window.location.replace(res.data.authorization_url);
+    } catch (err) {
+        
+    }
+  };
+
+  const continueWithGitHub= async () => {
+      try {
+          const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?redirect_uri=${import.meta.env.VITE_APP_API_URL}/github`)
+
+          window.location.replace(res.data.authorization_url);
+      } catch (err) {
+
+      }
+  };
+
+  //------------------------------------------------------------------------------
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -22,12 +64,37 @@ const SignupForm = () => {
       lastName: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      confirmPassword: ''
     },
-  })
- 
+  });
+
   function onSubmit(values: z.infer<typeof SignupValidation>) {
-    console.log(values)
+
+    signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
+
+  
+    for (let type in errors) {
+      for (let message of errors[type]) {
+        toast({
+          title: "SignUp Failed!",
+          variant: "destructive",
+          description: message,
+        });
+        console.log(message);
+      }
+    }
+
+    if(!errors) {
+      load_user();
+      setAccountCreated(true);
+    }
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to='/' />;
+  }
+  if(accountCreated) {
+      return <Navigate to='/sign-in' />;
   }
 
   return (
@@ -44,13 +111,13 @@ const SignupForm = () => {
 
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 w-full mt-4">
+          className="flex flex-col gap-3 w-full mt-4">
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shad-form_label">Fisrt Name</FormLabel>
+                <FormLabel className="shad-form_label">First Name</FormLabel>
                 <FormControl>
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>
@@ -115,7 +182,7 @@ const SignupForm = () => {
             )}
           />
 
-          <Button type="submit" className="shad-button_primary">
+          <Button type="submit" className="shad-button_primary mt-2">
             {isLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
@@ -123,6 +190,14 @@ const SignupForm = () => {
             ) : (
               "Sign Up"
             )}
+          </Button>
+
+          <Button type="button" className="shad-button_red" onClick={continueWithGoogle}>
+            Continue With Google
+          </Button>
+
+          <Button type="button" className="shad-button_green" onClick={continueWithGitHub}>
+            Continue With GitHub
           </Button>
 
           <p className="text-small-regular text-light-2 text-center mt-2">

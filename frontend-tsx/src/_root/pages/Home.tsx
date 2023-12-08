@@ -13,7 +13,9 @@ const Home = () => {
 
 
   return (
-    <div>
+    <>
+      <h1 className='font-bold'>HOME</h1><br/>
+
       <Button type="submit" className="shad-button_red">
         <Link className="nav-link" to="/sign-in">SignIn</Link>
       </Button>
@@ -21,7 +23,7 @@ const Home = () => {
       <Button type="submit" className="shad-button_green" onClick={logout}>
         Log out
       </Button>
-    </div>
+    </>
     
   )
 }

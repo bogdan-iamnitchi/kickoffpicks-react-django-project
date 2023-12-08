@@ -2,6 +2,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast"
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,11 +21,37 @@ const SigninForm = () => {
 
   const isLoading = false;
 
+  const { toast } = useToast()
+
+  //------------------------------------------------------------------------------
+
   const dispatch = useDispatch();
   const { signin, load_user } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
-  const { isAuthenticated } = state;
+  const { isAuthenticated, errors} = state;
+
+  //------------------------------------------------------------------------------
+
+  const continueWithGoogle = async () => {
+    try {
+        const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${import.meta.env.VITE_APP_API_URL}/google`)
+
+        window.location.replace(res.data.authorization_url);
+    } catch (err) {
+        
+    }
+  };
+
+  const continueWithGitHub= async () => {
+      try {
+          const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?redirect_uri=${import.meta.env.VITE_APP_API_URL}/github`)
+
+          window.location.replace(res.data.authorization_url);
+      } catch (err) {
+
+      }
+  };
 
   //------------------------------------------------------------------------------
 
@@ -36,10 +64,22 @@ const SigninForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof SigninValidation>) {
-    console.log(values);
 
     signin(values.email, values.password);
-    load_user();
+
+    for (let type in errors) {
+      toast({
+        title: "SignIn Failed!",
+        variant: "destructive",
+        description: errors[type].toString(),
+      });
+      console.log(errors[type]);
+    }
+
+    if(!errors) {
+      load_user();
+    }
+    
   }
 
   if (isAuthenticated == true) {
@@ -59,7 +99,7 @@ const SigninForm = () => {
         </p>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 w-full mt-4">
+          className="flex flex-col gap-3 w-full mt-4">
           <FormField
             control={form.control}
             name="email"
@@ -88,7 +128,7 @@ const SigninForm = () => {
             )}
           />
 
-          <Button type="submit" className="shad-button_primary">
+          <Button type="submit" className="shad-button_primary mt-2">
             {isLoading ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
@@ -98,15 +138,33 @@ const SigninForm = () => {
             )}
           </Button>
 
-          <p className="text-small-regular text-light-2 text-center mt-2">
-            Don&apos;t have an account?
-            <Link
-              to="/sign-up"
-              className="text-primary-500 text-small-semibold ml-1">
-              Sign up
-            </Link>
-          </p>
+          <Button type="button" className="shad-button_red" onClick={continueWithGoogle}>
+            Continue With Google
+          </Button>
+
+          <Button type="button" className="shad-button_green" onClick={continueWithGitHub}>
+            Continue With GitHub
+          </Button>
         </form>
+
+        <p className="text-small-regular text-light-2  text-sm text-center mt-3">
+          Forgot your password?
+          <Link
+            to="/reset-password"
+            className="text-primary-500 text-sm font-medium ml-1">
+            Reset Password
+          </Link>
+        </p>
+
+        <p className="text-small-regular text-light-2  text-sm text-center mt-1">
+          Don&apos;t have an account?
+          <Link
+            to="/sign-up"
+            className="text-primary-500  text-sm font-medium ml-1">
+            Sign up
+          </Link>
+        </p>
+          
       </div>
     </Form>
   );

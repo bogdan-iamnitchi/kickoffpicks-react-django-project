@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Dispatch } from "redux";
 import { ActionType} from "../actions-types/types";
-import { State } from "../actions-types";
 import { Action } from "../actions-types/index";
 
 export const load_user = () => async (dispatch: Dispatch<Action>) => {
@@ -14,7 +13,7 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
         }
     };
 
-    
+    console.log(localStorage.getItem('access'));
     if (localStorage.getItem('access')) {
         try {
             const res = await axios.get(
@@ -41,7 +40,7 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
 };
 
 
-export const googleAuthenticate = (state: State, code: string) => async (dispatch: Dispatch<Action>) => {
+export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>) => {
     if (state && code && !localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -73,7 +72,7 @@ export const googleAuthenticate = (state: State, code: string) => async (dispatc
     }
 };
 
-export const githubAuthenticate = (state: State, code: string) => async (dispatch: Dispatch<Action>)  => {
+export const githubAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>)  => {
     if (state && code && !localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -169,13 +168,25 @@ export const signup = (
             payload: res.data
         });
 
-        load_user();
-
     }
     catch (err) {
-        dispatch({
-            type: ActionType.SIGNUP_FAIL
-        });
+
+        //check if err is of type isAxiosError
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.SIGNUP_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.SIGNUP_FAIL,
+                errors: null
+            });
+        }
+
     }
 };
 
@@ -232,9 +243,21 @@ export const signin = (email: string, password: string) => async (dispatch: Disp
         });
 
     } catch (err) {
-        dispatch({
-            type: ActionType.LOGIN_FAIL
-        });
+        //check if err is of type isAxiosError
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.LOGIN_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.LOGIN_FAIL,
+                errors: null
+            });
+        }
     }
 
 };

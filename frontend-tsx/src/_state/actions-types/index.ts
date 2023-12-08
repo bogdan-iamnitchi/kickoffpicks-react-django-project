@@ -7,6 +7,7 @@ interface LoginSuccesAction {
 
 interface LoginFailAction {
     type: ActionType.LOGIN_FAIL,
+    errors: any
 }
 
 interface SignupSuccesAction {
@@ -16,6 +17,7 @@ interface SignupSuccesAction {
 
 interface SignupFailAction {
     type: ActionType.SIGNUP_FAIL,
+    errors: any
 }
 
 interface ActivationSuccesAction {
@@ -102,9 +104,12 @@ export type Action =
     | GithubAuthFailAction
     | LogoutAction
 
+export type Errors = Array<{ [key: string]: string[] }>
+
 export type State = {
     access: string,
     refresh: string,
     isAuthenticated: boolean,
-    user: any
+    user: any,
+    errors: Errors
 }
