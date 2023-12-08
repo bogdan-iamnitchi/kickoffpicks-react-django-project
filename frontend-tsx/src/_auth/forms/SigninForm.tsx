@@ -8,23 +8,42 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Loader from "@/components/shared/Loader";
 import { SigninValidation } from "@/lib/validation";
+import { Navigate } from "react-router-dom";
 
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { actionCreators, AuthState} from "@/_state";
 
 
 const SigninForm = () => {
 
   const isLoading = false;
 
+  const dispatch = useDispatch();
+  const { signin, load_user } = bindActionCreators(actionCreators, dispatch);
+
+  const state = useSelector((state: AuthState) => state.authState);
+  const { isAuthenticated } = state;
+
+  //------------------------------------------------------------------------------
+
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof SigninValidation>) {
-    console.log(values)
+    console.log(values);
+
+    signin(values.email, values.password);
+    load_user();
+  }
+
+  if (isAuthenticated == true) {
+    return <Navigate to='/' />;
   }
 
   return (

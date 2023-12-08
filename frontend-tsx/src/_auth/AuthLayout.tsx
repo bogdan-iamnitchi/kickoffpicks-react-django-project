@@ -1,7 +1,25 @@
 import { Outlet, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { AuthState, actionCreators } from "@/_state";
+
 
 export default function AuthLayout() {
-  const isAuthenticated = false;
+
+  const dispatch = useDispatch();
+  const { checkAuthenticated, load_user } = bindActionCreators(actionCreators, dispatch);
+
+  const state = useSelector((state: AuthState) => state.authState);
+  const { isAuthenticated } = state;
+
+
+  useEffect(() => {
+
+    checkAuthenticated();
+    load_user();
+    
+  }, [checkAuthenticated, load_user]);
 
   return (
     <>
