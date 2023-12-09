@@ -12,22 +12,24 @@ const Google = ({ googleAuthenticate }) => {
         const state = values.state ? values.state : null;
         const code = values.code ? values.code : null;
 
-        console.log('State: ' + state);
-        console.log('Code: ' + code);
+        //console.log('State: ' + state);
+        //console.log('Code: ' + code);
 
         if (state && code) {
             googleAuthenticate(state, code);
         }
-    }, [location]);
+    }, [location, googleAuthenticate]);
 
     return (
         <div className='container'>
-            <div class='jumbotron mt-5'>
-                <h1 class='display-4'>Welcome to Auth System!</h1>
-                <p class='lead'>This is an incredible authentication system with production level features!</p>
-                <hr class='my-4' />
-                <p>Click the Log In button</p>
-                <Link class='btn btn-primary btn-lg' to='/login' role='button'>Login</Link>
+            <div className="jumbotron mt-5">
+                <h1 className="display-4">Welcome to Kick of picks</h1>
+                <p className="lead">This is a very fun and simple game that can be played in teams and tests your knowledge of football.</p>
+                <hr className="my-4" />
+                <p>You can create a room and share the code with your friends</p>
+                <p className="lead">
+                    <Link className="btn btn-primary btn-lg" to="/login" role="button">Log in</Link>
+                </p>
             </div>
         </div>
     );

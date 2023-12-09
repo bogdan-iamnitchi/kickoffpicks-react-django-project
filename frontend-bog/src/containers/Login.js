@@ -32,7 +32,7 @@ const Login = ( {login, isAuthenticated} ) => {
         }
     };
 
-    const continueWithGitHub = async () => {
+    const continueWithGitHub= async () => {
         try {
             const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/github/?redirect_uri=${process.env.REACT_APP_API_URL}/github`)
 
