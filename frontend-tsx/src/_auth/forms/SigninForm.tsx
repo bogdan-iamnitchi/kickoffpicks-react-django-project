@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, AuthState} from "@/_state";
 
+const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
 const SigninForm = () => {
 
@@ -63,23 +64,31 @@ const SigninForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SigninValidation>) {
-
-    signin(values.email, values.password);
-
-    for (let type in errors) {
+  const onSubmit = (values: z.infer<typeof SigninValidation>) => {
+    try {
+      
+      signin(values.email, values.password);
+  
+      for (let type in errors) {
+        toast({
+          title: "SignIn Failed!",
+          variant: "destructive",
+          description: errors[type].toString(),
+        });
+        console.log(errors[type]);
+      }
+  
+      if (errors.length == 0) {
+        load_user();
+      }
+    } catch (err) {
       toast({
         title: "SignIn Failed!",
         variant: "destructive",
-        description: errors[type].toString(),
+        description: "Something Wrong, try again", // Assuming the error object has a message property
       });
-      console.log(errors[type]);
+      console.error(err);
     }
-
-    if(!errors) {
-      load_user();
-    }
-    
   }
 
   if (isAuthenticated == true) {
@@ -89,7 +98,7 @@ const SigninForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/images/logo.svg" alt="logo" />
+        <img src={imagePath} alt="logo" />
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Log in to your account

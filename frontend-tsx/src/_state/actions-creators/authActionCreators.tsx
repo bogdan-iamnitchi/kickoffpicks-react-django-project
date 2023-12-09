@@ -183,7 +183,7 @@ export const signup = (
         else {
             dispatch({
                 type: ActionType.SIGNUP_FAIL,
-                errors: null
+                errors: []
             });
         }
 
@@ -255,7 +255,7 @@ export const signin = (email: string, password: string) => async (dispatch: Disp
         else {
             dispatch({
                 type: ActionType.LOGIN_FAIL,
-                errors: null
+                errors: []
             });
         }
     }

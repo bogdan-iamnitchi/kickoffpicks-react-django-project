@@ -14,6 +14,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "@/_state";
 import { useState } from "react";
 
+const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
 const ResetPassword = () => {
 
@@ -48,7 +49,7 @@ const ResetPassword = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/images/logo.svg" alt="logo" />
+        <img src={imagePath} alt="logo" />
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Reset your account password

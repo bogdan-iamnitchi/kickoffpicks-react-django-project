@@ -17,6 +17,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators, AuthState} from "@/_state";
 import { useState } from "react";
 
+const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
 const SignupForm = () => {
 
@@ -68,25 +69,33 @@ const SignupForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignupValidation>) {
-
-    signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
-
+  const onSubmit = (values: z.infer<typeof SignupValidation>) => {
+    try {
+      
+      signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
   
-    for (let type in errors) {
-      for (let message of errors[type]) {
-        toast({
-          title: "SignUp Failed!",
-          variant: "destructive",
-          description: message,
-        });
-        console.log(message);
+      for (let type in errors) {
+        for (let message of errors[type]) {
+          toast({
+            title: "SignUp Failed!",
+            variant: "destructive",
+            description: message,
+          });
+          console.log(message);
+        }
       }
-    }
-
-    if(!errors) {
-      load_user();
-      setAccountCreated(true);
+  
+      if (errors.length == 0) {
+        load_user();
+        setAccountCreated(true);
+      }
+    } catch (err) {
+      toast({
+        title: "SignIn Failed!",
+        variant: "destructive",
+        description: "Something Wrong, try again", // Assuming the error object has a message property
+      });
+      console.error(err);
     }
   }
 
@@ -100,7 +109,7 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/images/logo.svg" alt="logo" />
+        <img src={imagePath} alt="logo" />
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new account

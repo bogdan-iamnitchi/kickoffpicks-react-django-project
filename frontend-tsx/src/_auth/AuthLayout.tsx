@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { AuthState, actionCreators } from "@/_state";
 
+const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/side-img.svg";
 
 export default function AuthLayout() {
 
@@ -32,7 +33,7 @@ export default function AuthLayout() {
           </section>
 
           <img
-            src="assets/images/side-img.svg"
+            src={imagePath}
             alt="logo"
             className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat"
           />
