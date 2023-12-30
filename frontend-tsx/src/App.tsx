@@ -8,6 +8,8 @@ import { SigninForm, SignupForm, ResetPassword, ResetPasswordConfirm, GitHub, Go
 import RootLayout from './_root/RootLayout'
 import { Home } from './_root/pages'
 
+import Chat from './_auth/chats/Chat'
+
 const App = () => {
 
   return (
@@ -22,6 +24,8 @@ const App = () => {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
                 <Route path="/activate/:uid/:token" element={<VerifyAccounut />} />
+
+                <Route path='/chat' element={<Chat />} />
             </Route>
 
             {/* public routes*/}

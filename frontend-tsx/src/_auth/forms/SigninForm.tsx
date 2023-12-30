@@ -27,10 +27,10 @@ const SigninForm = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signin, load_user } = bindActionCreators(actionCreators, dispatch);
+  const { signin, load_user, chat_engine_signin } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
-  const { isAuthenticated, errors} = state;
+  const { isAuthenticated, errors } = state;
 
   //------------------------------------------------------------------------------
 
@@ -64,10 +64,14 @@ const SigninForm = () => {
     },
   });
 
+
+
   const onSubmit = (values: z.infer<typeof SigninValidation>) => {
     try {
       
+ 
       signin(values.email, values.password);
+      chat_engine_signin(values.email, values.password);
   
       for (let type in errors) {
         toast({
@@ -80,6 +84,7 @@ const SigninForm = () => {
   
       if (errors.length == 0) {
         load_user();
+        
       }
     } catch (err) {
       toast({

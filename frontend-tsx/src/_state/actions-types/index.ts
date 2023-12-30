@@ -83,6 +83,30 @@ interface LogoutAction {
     type: ActionType.LOGOUT
 }
 
+
+interface ChatEngineLoginAction {
+    type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
+    payload: any
+}
+
+interface ChatEngineLoginFailAction {
+    type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+    errors: any
+}
+
+interface ChatEngineSignupAction {
+    type: ActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
+    payload: any
+}
+
+interface ChatEngineSignupFailAction {
+    type: ActionType.CHAT_ENGINE_SIGNUP_FAIL,
+    errors: any
+}
+
+
+
+
 export type Action = 
     LoginSuccesAction 
     | LoginFailAction
@@ -103,6 +127,11 @@ export type Action =
     | GithubAuthSuccesAction
     | GithubAuthFailAction
     | LogoutAction
+    
+    | ChatEngineLoginAction
+    | ChatEngineLoginFailAction
+    | ChatEngineSignupAction
+    | ChatEngineSignupFailAction
 
 export type Errors = Array<{ [key: string]: string[] }>
 
