@@ -76,7 +76,13 @@ const authReducer = (state: State = initialState, action: Action) => {
     case ActionType.USER_LOADED_SUCCESS:
         return {
             ...state,
-            user: action.payload
+            user: {
+                ...state.user,
+                id: action.payload.id,
+                email: action.payload.email,
+                first_name: action.payload.first_name,
+                last_name: action.payload.last_name,
+            }
         }
 
     case ActionType.USER_LOADED_FAIL:
@@ -84,9 +90,34 @@ const authReducer = (state: State = initialState, action: Action) => {
             ...state,
             user: null
         }
+    
+    case ActionType.CHAT_ENGINE_LOGIN_SUCCESS:
+        return {
+            ...state,
+            //add a new filed with password to the user
+            isChatEngineAuthenticated: true,
+            user: {
+                ...state.user,
+                password: action.payload
+            }
+        }
+
+    case ActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
+        return {
+            ...state,
+            isChatEngineAuthenticated: false,
+        }
+
+    case ActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
+    case ActionType.CHAT_ENGINE_LOGIN_SUCCESS:
+        return {
+            ...state,
+            //add a new filed with password to the user
+            isChatEngineAuthenticated: false,
+            user: null
+        }
 
     
-
     case ActionType.PASSWORD_RESET_SUCCESS:
     case ActionType.PASSWORD_RESET_FAIL:
     case ActionType.PASSWORD_RESET_CONFIRM_SUCCESS:

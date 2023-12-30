@@ -29,7 +29,7 @@ const SignupForm = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signup, load_user } = bindActionCreators(actionCreators, dispatch);
+  const { signup, load_user, chat_engine_signup } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated, errors } = state;
@@ -73,7 +73,8 @@ const SignupForm = () => {
     try {
       
       signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
-  
+      chat_engine_signup(values.email, values.password, values.email, values.firstName, values.lastName);
+
       for (let type in errors) {
         for (let message of errors[type]) {
           toast({

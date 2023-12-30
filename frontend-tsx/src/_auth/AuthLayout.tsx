@@ -1,4 +1,4 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -25,7 +25,10 @@ export default function AuthLayout() {
   return (
     <>
       {isAuthenticated ? (
-        <Navigate to="/" />
+        // <Navigate to="/" />
+        <>
+          <Outlet />
+        </>
       ) : (
         <>
           <section className="flex flex-1 justify-center items-center flex-col py-10">

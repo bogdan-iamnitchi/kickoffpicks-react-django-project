@@ -3,6 +3,83 @@ import { Dispatch } from "redux";
 import { ActionType} from "../actions-types/types";
 import { Action } from "../actions-types/index";
 
+export const chat_engine_signin = (username: string, secret: string) => async (dispatch: Dispatch<Action>) => {
+    const config = {
+        headers: {
+            "Project-ID": import.meta.env.VITE_APP_CHAT_ENGINE_PROJECT_ID,
+            "User-Name": username,
+            "User-Secret": secret
+        }
+    };
+    
+    console.log(username, secret);
+
+    try {
+        await axios.get(
+            `${import.meta.env.VITE_APP_CHAT_ENGINE_APP_URL}/users/me/`,
+            config
+        );
+
+        dispatch({
+            type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
+            payload: secret
+        });
+
+    } catch (err) {
+        console.log(err);
+        dispatch({
+            type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+            errors: []
+        });
+    }
+
+};
+
+export const chat_engine_signup = (
+    username: string, 
+    secret: string, 
+    email: string, 
+    first_name: string, 
+    last_name: string, 
+) => async (dispatch: Dispatch<Action>) => {
+
+    const config = {
+        headers: {
+            "Private-Key": "be592df0-923c-4c08-a902-c32820e2bc90"
+        }
+    };
+
+    const body = {
+        "username": username,
+        "secret": secret,
+        "email": email,
+        "first_name": first_name,
+        "last_name": last_name,
+    };
+
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_CHAT_ENGINE_APP_URL}/users/`,
+            body,
+            config
+        );
+
+        dispatch({
+            type: ActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
+            payload: res.data
+        });
+
+    }
+    catch (err) {
+        dispatch({
+            type: ActionType.CHAT_ENGINE_SIGNUP_FAIL,
+            errors: []
+        });
+
+    }
+};
+
 export const load_user = () => async (dispatch: Dispatch<Action>) => {
 
     const config = {
