@@ -48,7 +48,7 @@ class CreateRoom(APIView):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         
-        room = create_room_bll(request, self.serializer_class)
+        room = create_or_update_room_bll(request, self.serializer_class)
         if room:
             return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
         else:
@@ -63,9 +63,10 @@ class JoinRoom(APIView):
             self.request.session.create()
             
         code = request.data.get(self.lookup_url_kwarg)
+        print("code: ", code)
         if code != None:
-            queryset = Room.objects.filter(code=code)
-            if len(queryset) > 0:
+            rooms = get_room_by_code(code)
+            if len(rooms) > 0:
                 self.request.session["room_code"] = code
                 return Response({"message" : "Room Joined!"}, status=status.HTTP_200_OK)
             return Response({"Room Not Found": "Invalid room code."}, status=status.HTTP_404_NOT_FOUND) 

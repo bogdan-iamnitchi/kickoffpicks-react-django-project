@@ -29,7 +29,7 @@ const SigninForm = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signin, chat_engine_signin } = bindActionCreators(actionCreators, dispatch);
+  const { signin } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated, errors } = state;

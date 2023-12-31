@@ -20,7 +20,11 @@ const Home = () => {
       </Button>
 
       <Button type="submit" className="shad-button_orange">
-      <Link className="nav-link" to="/chat">Chat</Link>
+        <Link className="nav-link" to="/chat">Chat</Link>
+      </Button>
+
+      <Button type="submit" className="shad-button_blue">
+        <Link className="nav-link" to="/rooms-home">Game</Link>
       </Button>
 
       <Button type="submit" className="shad-button_green" onClick={logout}>
