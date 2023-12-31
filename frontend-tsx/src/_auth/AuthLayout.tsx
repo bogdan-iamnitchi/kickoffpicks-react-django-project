@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -9,7 +9,7 @@ const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/side-im
 export default function AuthLayout() {
 
   const dispatch = useDispatch();
-  const { checkAuthenticated, load_user } = bindActionCreators(actionCreators, dispatch);
+  const { checkAuthenticated } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated } = state;
@@ -18,17 +18,13 @@ export default function AuthLayout() {
   useEffect(() => {
 
     checkAuthenticated();
-    load_user();
     
   }, []);
 
   return (
     <>
       {isAuthenticated ? (
-        // <Navigate to="/" />
-        <>
-          <Outlet />
-        </>
+        <Navigate to="/" />
       ) : (
         <>
           <section className="flex flex-1 justify-center items-center flex-col py-10">

@@ -16,6 +16,7 @@
 
 @layer utilities {
   /* TYPOGRAPHY */
+  
   .h1-bold {
     @apply text-[36px] font-bold leading-[140%] tracking-tighter;
   }
@@ -280,6 +281,10 @@
 
   .shad-button_orange {
     @apply bg-orange-600 hover:bg-orange-500 text-light-1 flex gap-2 !important;
+  }
+
+  .shad-button_blue {
+    @apply bg-blue-800 hover:bg-blue-700 text-light-1 flex gap-2 !important;
   }
 
   .shad-button_dark_4 {

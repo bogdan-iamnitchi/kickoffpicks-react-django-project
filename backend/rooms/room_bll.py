@@ -13,7 +13,7 @@ def get_room_by_code(code):
     room = Room.objects.filter(code=code)
     return room
 
-def create_room_bll(request, serializer_class):
+def create_or_update_room_bll(request, serializer_class):
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         host = request.session.session_key
@@ -23,11 +23,14 @@ def create_room_bll(request, serializer_class):
         rooms = get_room_by_host(host)
         if len(rooms) > 0:
             room = rooms[0]
+            
+            request.session["room_code"] = room.code
             room.max_players = max_players
             room.votes_to_skip = votes_to_skip
             room.save(update_fields=['max_players', 'votes_to_skip'])
         else:
             room = Room(host=host, max_players=max_players, votes_to_skip=votes_to_skip)
+            request.session["room_code"] = room.code
             room.save()
         return room
     return None

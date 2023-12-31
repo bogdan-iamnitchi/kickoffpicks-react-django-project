@@ -6,9 +6,9 @@ import { Toaster } from "@/components/ui/toaster"
 import AuthLayout from './_auth/AuthLayout'
 import { SigninForm, SignupForm, ResetPassword, ResetPasswordConfirm, GitHub, Google, VerifyAccounut} from './_auth'
 import RootLayout from './_root/RootLayout'
-import { Home } from './_root/pages'
 
-import Chat from './_auth/chats/Chat'
+import { Home, ChatAuth } from './_root/pages'
+import { CreateRoom, JoinRoom, Room, RoomsHome } from './_rooms/pages'
 
 const App = () => {
 
@@ -25,12 +25,20 @@ const App = () => {
                 <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
                 <Route path="/activate/:uid/:token" element={<VerifyAccounut />} />
 
-                <Route path='/chat' element={<Chat />} />
+            </Route>
+
+            <Route element={<RootLayout />}>
+                <Route path='/rooms-home' element={<RoomsHome />} />
+                <Route path='/create-room' element={<CreateRoom />} />
+                <Route path='/join-room' element={<JoinRoom />} />
+                <Route path='/room/:roomCode' element={<Room />} />
+                
             </Route>
 
             {/* public routes*/}
             <Route element={<RootLayout />}>
                 <Route index element={<Home />} />
+                <Route path='/chat' element={<ChatAuth />} />
             </Route>
         </Routes>
 

@@ -12,25 +12,37 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         }
     };
     
-    console.log(username, secret);
+    // console.log(username, secret);
 
     try {
-        await axios.get(
+        const res = await axios.get(
             `${import.meta.env.VITE_APP_CHAT_ENGINE_APP_URL}/users/me/`,
             config
         );
 
         dispatch({
             type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
-            payload: secret
+            payload: res.data
         });
 
+        dispatch<any>(load_user());
+
     } catch (err) {
-        console.log(err);
-        dispatch({
-            type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
-            errors: []
-        });
+        // console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                errors: []
+            });
+        }
     }
 
 };
@@ -90,7 +102,7 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
         }
     };
 
-    console.log(localStorage.getItem('access'));
+    // console.log(localStorage.getItem('access'));
     if (localStorage.getItem('access')) {
         try {
             const res = await axios.get(
@@ -117,105 +129,7 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
 };
 
 
-export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>) => {
-    if (state && code && !localStorage.getItem('access')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        };
 
-        const details: { [key: string]: string } = {
-            'state': String(state),
-            'code': code
-        };
-
-        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/google-oauth2/?${formBody}`, config);
-
-            dispatch({
-                type: ActionType.GOOGLE_AUTH_SUCCESS,
-                payload: res.data
-            });
-
-            load_user();
-        } catch (err) {
-            dispatch({
-                type: ActionType.GOOGLE_AUTH_FAIL
-            });
-        }
-    }
-};
-
-export const githubAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>)  => {
-    if (state && code && !localStorage.getItem('access')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        };
-
-        const details: { [key: string]: string } = {
-            'state': String(state),
-            'code': code
-        };
-
-        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
-
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?${formBody}`, config);
-
-            dispatch({
-                type: ActionType.GITHUB_AUTH_SUCCESS,
-                payload: res.data
-            });
-
-            load_user();
-        } catch (err) {
-            dispatch({
-                type: ActionType.GITHUB_AUTH_FAIL
-            });
-        }
-    }
-};
-
-export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
-    if (localStorage.getItem('access')) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }; 
-
-        const body = JSON.stringify({ token: localStorage.getItem('access') });
-
-        try {
-            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/jwt/verify/`, body, config)
-
-            if (res.data.code !== 'token_not_valid') {
-                dispatch({
-                    type: ActionType.AUTHENTICATED_SUCCESS
-                });
-            } else {
-                dispatch({
-                    type: ActionType.AUTHENTICATED_FAIL
-                });
-            }
-        } catch (err) {
-            dispatch({
-                type: ActionType.AUTHENTICATED_FAIL
-            });
-        }
-
-    } else {
-        dispatch({
-            type: ActionType.AUTHENTICATED_FAIL
-        });
-    }
-};
 
 export const signup = (
     first_name: string, 
@@ -245,6 +159,8 @@ export const signup = (
             payload: res.data
         });
 
+        dispatch<any>(load_user());
+
     }
     catch (err) {
 
@@ -264,6 +180,180 @@ export const signup = (
             });
         }
 
+    }
+};
+
+export const signin = (email: string, password: string) => async (dispatch: Dispatch<Action>) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    const body = JSON.stringify({ email, password });
+
+    try {
+
+        
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/auth/jwt/create/`,
+            body,
+            config
+        );
+        
+        dispatch({
+            type: ActionType.LOGIN_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch<any>(load_user());
+
+    } catch (err) {
+        //check if err is of type isAxiosError
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.LOGIN_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.LOGIN_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
+export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>) => {
+    if (state && code && !localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+
+        const details: { [key: string]: string } = {
+            'state': String(state),
+            'code': code
+        };
+
+        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/google-oauth2/?${formBody}`, config);
+
+            dispatch({
+                type: ActionType.GOOGLE_AUTH_SUCCESS,
+                payload: res.data
+            });
+
+            dispatch<any>(load_user());
+
+        } catch (err) {
+            //check if err is of type isAxiosError
+            if (axios.isAxiosError(err)) {
+                if(err.response?.data) {
+                    dispatch({
+                        type: ActionType.GOOGLE_AUTH_FAIL,
+                        errors: err.response.data
+                    });
+                }
+            }
+            else {
+                dispatch({
+                    type: ActionType.GOOGLE_AUTH_FAIL,
+                    errors: []
+                });
+            }
+        }
+    }
+};
+
+export const githubAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>)  => {
+    if (state && code && !localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+
+        const details: { [key: string]: string } = {
+            'state': String(state),
+            'code': code
+        };
+
+        const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?${formBody}`, config);
+
+            dispatch({
+                type: ActionType.GITHUB_AUTH_SUCCESS,
+                payload: res.data
+            });
+
+            dispatch<any>(load_user());
+        } catch (err) {
+
+            //check if err is of type isAxiosError
+            if (axios.isAxiosError(err)) {
+                if(err.response?.data) {
+                    dispatch({
+                        type: ActionType.GITHUB_AUTH_FAIL,
+                        errors: err.response.data
+                    });
+                }
+            }
+            else {
+                dispatch({
+                    type: ActionType.GITHUB_AUTH_FAIL,
+                    errors: []
+                });
+            }
+        }
+    }
+};
+
+export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }; 
+
+        const body = JSON.stringify({ token: localStorage.getItem('access') });
+
+        try {
+            const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/jwt/verify/`, body, config)
+
+            if (res.data.code !== 'token_not_valid') {
+                dispatch({
+                    type: ActionType.AUTHENTICATED_SUCCESS
+                });
+
+                dispatch<any>(load_user());
+
+            } else {
+                dispatch({
+                    type: ActionType.AUTHENTICATED_FAIL
+                });
+            }
+        } catch (err) {
+            dispatch({
+                type: ActionType.AUTHENTICATED_FAIL
+            });
+        }
+
+    } else {
+        dispatch({
+            type: ActionType.AUTHENTICATED_FAIL
+        });
     }
 };
 
@@ -295,49 +385,7 @@ export const verify = (uid: string, token: string) => async (dispatch: Dispatch<
 
 }
 
-export const signin = (email: string, password: string) => async (dispatch: Dispatch<Action>) => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
 
-    const body = JSON.stringify({ email, password });
-
-    try {
-
-        
-        const res = await axios.post(
-            `${import.meta.env.VITE_APP_API_URL}/auth/jwt/create/`,
-            body,
-            config
-        );
-            
-
-        dispatch({
-            type: ActionType.LOGIN_SUCCESS,
-            payload: res.data
-        });
-
-    } catch (err) {
-        //check if err is of type isAxiosError
-        if (axios.isAxiosError(err)) {
-            if(err.response?.data) {
-                dispatch({
-                    type: ActionType.LOGIN_FAIL,
-                    errors: err.response.data
-                });
-            }
-        }
-        else {
-            dispatch({
-                type: ActionType.LOGIN_FAIL,
-                errors: []
-            });
-        }
-    }
-
-};
 
 export const reset_password = (email: string) => async (dispatch: Dispatch<Action>) => {
     const config = {
