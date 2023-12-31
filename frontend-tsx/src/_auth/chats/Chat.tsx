@@ -1,24 +1,15 @@
 import { PrettyChatWindow } from "react-chat-engine-pretty";
 
-import { useDispatch, useSelector} from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators, AuthState} from "@/_state";
+import { useSelector} from "react-redux";
+import { AuthState} from "@/_state";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Chat = () => {
-
-    const dispatch = useDispatch();
-    const { load_user } = bindActionCreators(actionCreators, dispatch);
 
     const state = useSelector((state: AuthState) => state.authState);
     const[ user ] = useState(state.user);
 
-    useEffect(() => {
-
-        load_user();
-        
-      }, []);
 
     if(!user) return (<>Loading....</>);
 

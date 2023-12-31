@@ -15,7 +15,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, AuthState} from "@/_state";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
@@ -24,7 +24,9 @@ const SignupForm = () => {
   const isLoading = false;
 
   const [accountCreated, setAccountCreated] = useState(false);
+  
   const { toast } = useToast()
+  const [checkedErrors, setCheckedErrors] = useState(false);
 
   //------------------------------------------------------------------------------
 
@@ -69,12 +71,9 @@ const SignupForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof SignupValidation>) => {
-    try {
-      
-      signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
-      chat_engine_signup(values.email, values.password, values.email, values.firstName, values.lastName);
-
+  useEffect(() => {
+    // This useEffect will be triggered whenever 'errors' in the state changes
+    if(checkedErrors){
       for (let type in errors) {
         for (let message of errors[type]) {
           toast({
@@ -85,9 +84,21 @@ const SignupForm = () => {
           console.log(message);
         }
       }
+
+      setCheckedErrors(false);
+    }
+
+  }, [errors]);
+
+  const onSubmit = (values: z.infer<typeof SignupValidation>) => {
+    try {
+      
+      signup(values.firstName, values.lastName, values.email, values.password, values.confirmPassword);
+      chat_engine_signup(values.email, values.password, values.email, values.firstName, values.lastName);
   
+      setCheckedErrors(true);
+
       if (errors.length == 0) {
-        load_user();
         setAccountCreated(true);
       }
     } catch (err) {

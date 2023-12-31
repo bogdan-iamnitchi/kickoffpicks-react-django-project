@@ -9,7 +9,7 @@ const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/side-im
 export default function AuthLayout() {
 
   const dispatch = useDispatch();
-  const { checkAuthenticated, load_user } = bindActionCreators(actionCreators, dispatch);
+  const { checkAuthenticated } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated } = state;
@@ -18,7 +18,6 @@ export default function AuthLayout() {
   useEffect(() => {
 
     checkAuthenticated();
-    load_user();
     
   }, []);
 

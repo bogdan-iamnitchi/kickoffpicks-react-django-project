@@ -3,6 +3,15 @@ import { Dispatch } from "redux";
 import { ActionType} from "../actions-types/types";
 import { Action } from "../actions-types/index";
 
+export const reset_errors = () => async (dispatch: Dispatch<Action>) => {
+
+    dispatch({
+        type: ActionType.RESET_ERRORS,
+        errors: []
+    });
+
+}
+
 export const chat_engine_signin = (username: string, secret: string) => async (dispatch: Dispatch<Action>) => {
     const config = {
         headers: {
@@ -24,6 +33,8 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
             type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
             payload: secret
         });
+
+        dispatch<any>(load_user());
 
     } catch (err) {
         console.log(err);
@@ -117,6 +128,105 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
 };
 
 
+
+
+export const signup = (
+    first_name: string, 
+    last_name: string, 
+    email: string, 
+    password: string, 
+    re_password: string
+) => async (dispatch: Dispatch<Action>) => {
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    const body = JSON.stringify({ first_name, last_name, email, password, re_password });
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/auth/users/`,
+            body,
+            config
+        );
+
+        dispatch({
+            type: ActionType.SIGNUP_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch<any>(load_user());
+
+    }
+    catch (err) {
+
+        //check if err is of type isAxiosError
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.SIGNUP_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.SIGNUP_FAIL,
+                errors: []
+            });
+        }
+
+    }
+};
+
+export const signin = (email: string, password: string) => async (dispatch: Dispatch<Action>) => {
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    const body = JSON.stringify({ email, password });
+
+    try {
+
+        
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/auth/jwt/create/`,
+            body,
+            config
+        );
+        
+        dispatch({
+            type: ActionType.LOGIN_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch<any>(load_user());
+
+    } catch (err) {
+        //check if err is of type isAxiosError
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.LOGIN_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.LOGIN_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
 export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>) => {
     if (state && code && !localStorage.getItem('access')) {
         const config = {
@@ -140,7 +250,7 @@ export const googleAuthenticate = (state: string, code: string) => async (dispat
                 payload: res.data
             });
 
-            load_user();
+            dispatch<any>(load_user());
         } catch (err) {
             dispatch({
                 type: ActionType.GOOGLE_AUTH_FAIL
@@ -172,7 +282,7 @@ export const githubAuthenticate = (state: string, code: string) => async (dispat
                 payload: res.data
             });
 
-            load_user();
+            dispatch<any>(load_user());
         } catch (err) {
             dispatch({
                 type: ActionType.GITHUB_AUTH_FAIL
@@ -199,6 +309,9 @@ export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
                 dispatch({
                     type: ActionType.AUTHENTICATED_SUCCESS
                 });
+
+                dispatch<any>(load_user());
+
             } else {
                 dispatch({
                     type: ActionType.AUTHENTICATED_FAIL
@@ -214,56 +327,6 @@ export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
         dispatch({
             type: ActionType.AUTHENTICATED_FAIL
         });
-    }
-};
-
-export const signup = (
-    first_name: string, 
-    last_name: string, 
-    email: string, 
-    password: string, 
-    re_password: string
-) => async (dispatch: Dispatch<Action>) => {
-
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    const body = JSON.stringify({ first_name, last_name, email, password, re_password });
-
-    try {
-        const res = await axios.post(
-            `${import.meta.env.VITE_APP_API_URL}/auth/users/`,
-            body,
-            config
-        );
-
-        dispatch({
-            type: ActionType.SIGNUP_SUCCESS,
-            payload: res.data
-        });
-
-    }
-    catch (err) {
-
-        //check if err is of type isAxiosError
-        if (axios.isAxiosError(err)) {
-            if(err.response?.data) {
-                dispatch({
-                    type: ActionType.SIGNUP_FAIL,
-                    errors: err.response.data
-                });
-            }
-        }
-        else {
-            dispatch({
-                type: ActionType.SIGNUP_FAIL,
-                errors: []
-            });
-        }
-
     }
 };
 
@@ -295,49 +358,7 @@ export const verify = (uid: string, token: string) => async (dispatch: Dispatch<
 
 }
 
-export const signin = (email: string, password: string) => async (dispatch: Dispatch<Action>) => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
 
-    const body = JSON.stringify({ email, password });
-
-    try {
-
-        
-        const res = await axios.post(
-            `${import.meta.env.VITE_APP_API_URL}/auth/jwt/create/`,
-            body,
-            config
-        );
-            
-
-        dispatch({
-            type: ActionType.LOGIN_SUCCESS,
-            payload: res.data
-        });
-
-    } catch (err) {
-        //check if err is of type isAxiosError
-        if (axios.isAxiosError(err)) {
-            if(err.response?.data) {
-                dispatch({
-                    type: ActionType.LOGIN_FAIL,
-                    errors: err.response.data
-                });
-            }
-        }
-        else {
-            dispatch({
-                type: ActionType.LOGIN_FAIL,
-                errors: []
-            });
-        }
-    }
-
-};
 
 export const reset_password = (email: string) => async (dispatch: Dispatch<Action>) => {
     const config = {

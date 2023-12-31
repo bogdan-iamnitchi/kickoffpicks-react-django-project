@@ -71,7 +71,11 @@ const authReducer = (state: State = initialState, action: Action) => {
             user: null
         }
 
-        
+    case ActionType.RESET_ERRORS:
+        return {
+            ...state,
+            errors: []
+        }
 
     case ActionType.USER_LOADED_SUCCESS:
         return {

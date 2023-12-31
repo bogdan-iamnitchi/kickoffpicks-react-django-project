@@ -104,6 +104,10 @@ interface ChatEngineSignupFailAction {
     errors: any
 }
 
+interface ResetErrorsAction {
+    type: ActionType.RESET_ERRORS,
+    errors: any
+}
 
 
 
@@ -132,6 +136,8 @@ export type Action =
     | ChatEngineLoginFailAction
     | ChatEngineSignupAction
     | ChatEngineSignupFailAction
+
+    | ResetErrorsAction
 
 export type Errors = Array<{ [key: string]: string[] }>
 

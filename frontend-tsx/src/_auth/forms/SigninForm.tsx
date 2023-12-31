@@ -15,6 +15,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators, AuthState} from "@/_state";
+import { useEffect, useState } from "react";
 
 const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
@@ -23,11 +24,12 @@ const SigninForm = () => {
   const isLoading = false;
 
   const { toast } = useToast()
+  const [checkedErrors, setCheckedErrors] = useState(false);
 
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signin, load_user, chat_engine_signin } = bindActionCreators(actionCreators, dispatch);
+  const { signin, chat_engine_signin } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated, errors } = state;
@@ -44,7 +46,7 @@ const SigninForm = () => {
     }
   };
 
-  const continueWithGitHub= async () => {
+  const continueWithGitHub = async () => {
       try {
           const res = await axios.get(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?redirect_uri=${import.meta.env.VITE_APP_API_URL}/github`)
 
@@ -64,15 +66,9 @@ const SigninForm = () => {
     },
   });
 
-
-
-  const onSubmit = (values: z.infer<typeof SigninValidation>) => {
-    try {
-      
- 
-      signin(values.email, values.password);
-      chat_engine_signin(values.email, values.password);
-  
+  useEffect(() => {
+    // This useEffect will be triggered whenever 'errors' in the state changes
+    if(checkedErrors){
       for (let type in errors) {
         toast({
           title: "SignIn Failed!",
@@ -81,11 +77,21 @@ const SigninForm = () => {
         });
         console.log(errors[type]);
       }
+
+      setCheckedErrors(false);
+    }
+
+  }, [errors]);
+
+
+  const onSubmit = (values: z.infer<typeof SigninValidation>) => {
+    try {
+      
+      signin(values.email, values.password);
+      chat_engine_signin(values.email, values.password);
+
+      setCheckedErrors(true);
   
-      if (errors.length == 0) {
-        load_user();
-        
-      }
     } catch (err) {
       toast({
         title: "SignIn Failed!",
