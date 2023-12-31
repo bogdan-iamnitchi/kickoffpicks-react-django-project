@@ -3,15 +3,6 @@ import { Dispatch } from "redux";
 import { ActionType} from "../actions-types/types";
 import { Action } from "../actions-types/index";
 
-export const reset_errors = () => async (dispatch: Dispatch<Action>) => {
-
-    dispatch({
-        type: ActionType.RESET_ERRORS,
-        errors: []
-    });
-
-}
-
 export const chat_engine_signin = (username: string, secret: string) => async (dispatch: Dispatch<Action>) => {
     const config = {
         headers: {
@@ -21,27 +12,37 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         }
     };
     
-    console.log(username, secret);
+    // console.log(username, secret);
 
     try {
-        await axios.get(
+        const res = await axios.get(
             `${import.meta.env.VITE_APP_CHAT_ENGINE_APP_URL}/users/me/`,
             config
         );
 
         dispatch({
             type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
-            payload: secret
+            payload: res.data
         });
 
         dispatch<any>(load_user());
 
     } catch (err) {
-        console.log(err);
-        dispatch({
-            type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
-            errors: []
-        });
+        // console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                errors: []
+            });
+        }
     }
 
 };
@@ -101,7 +102,7 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
         }
     };
 
-    console.log(localStorage.getItem('access'));
+    // console.log(localStorage.getItem('access'));
     if (localStorage.getItem('access')) {
         try {
             const res = await axios.get(
@@ -251,10 +252,23 @@ export const googleAuthenticate = (state: string, code: string) => async (dispat
             });
 
             dispatch<any>(load_user());
+
         } catch (err) {
-            dispatch({
-                type: ActionType.GOOGLE_AUTH_FAIL
-            });
+            //check if err is of type isAxiosError
+            if (axios.isAxiosError(err)) {
+                if(err.response?.data) {
+                    dispatch({
+                        type: ActionType.GOOGLE_AUTH_FAIL,
+                        errors: err.response.data
+                    });
+                }
+            }
+            else {
+                dispatch({
+                    type: ActionType.GOOGLE_AUTH_FAIL,
+                    errors: []
+                });
+            }
         }
     }
 };
@@ -284,9 +298,22 @@ export const githubAuthenticate = (state: string, code: string) => async (dispat
 
             dispatch<any>(load_user());
         } catch (err) {
-            dispatch({
-                type: ActionType.GITHUB_AUTH_FAIL
-            });
+
+            //check if err is of type isAxiosError
+            if (axios.isAxiosError(err)) {
+                if(err.response?.data) {
+                    dispatch({
+                        type: ActionType.GITHUB_AUTH_FAIL,
+                        errors: err.response.data
+                    });
+                }
+            }
+            else {
+                dispatch({
+                    type: ActionType.GITHUB_AUTH_FAIL,
+                    errors: []
+                });
+            }
         }
     }
 };

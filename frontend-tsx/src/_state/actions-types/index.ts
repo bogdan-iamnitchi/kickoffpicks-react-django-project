@@ -68,6 +68,7 @@ interface GoogleAuthSuccesAction {
 
 interface GoogleAuthFailAction {
     type: ActionType.GOOGLE_AUTH_FAIL,
+    errors: any
 }
 
 interface GithubAuthSuccesAction {
@@ -77,6 +78,7 @@ interface GithubAuthSuccesAction {
 
 interface GithubAuthFailAction {
     type: ActionType.GITHUB_AUTH_FAIL,
+    errors: any
 }
 
 interface LogoutAction {
@@ -101,11 +103,6 @@ interface ChatEngineSignupAction {
 
 interface ChatEngineSignupFailAction {
     type: ActionType.CHAT_ENGINE_SIGNUP_FAIL,
-    errors: any
-}
-
-interface ResetErrorsAction {
-    type: ActionType.RESET_ERRORS,
     errors: any
 }
 
@@ -137,7 +134,6 @@ export type Action =
     | ChatEngineSignupAction
     | ChatEngineSignupFailAction
 
-    | ResetErrorsAction
 
 export type Errors = Array<{ [key: string]: string[] }>
 
@@ -145,6 +141,7 @@ export type State = {
     access: string,
     refresh: string,
     isAuthenticated: boolean,
+    isChatEngineAuthenticated: boolean,
     user: any,
     errors: Errors
 }

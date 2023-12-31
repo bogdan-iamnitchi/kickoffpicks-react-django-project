@@ -16,6 +16,7 @@
 
 @layer utilities {
   /* TYPOGRAPHY */
+  
   .h1-bold {
     @apply text-[36px] font-bold leading-[140%] tracking-tighter;
   }

@@ -6,9 +6,7 @@ import { Toaster } from "@/components/ui/toaster"
 import AuthLayout from './_auth/AuthLayout'
 import { SigninForm, SignupForm, ResetPassword, ResetPasswordConfirm, GitHub, Google, VerifyAccounut} from './_auth'
 import RootLayout from './_root/RootLayout'
-import { Home } from './_root/pages'
-
-import Chat from './_auth/chats/Chat'
+import { Home, Chat, ChatAuth } from './_root/pages'
 
 const App = () => {
 
@@ -25,12 +23,12 @@ const App = () => {
                 <Route path="/password/reset/confirm/:uid/:token" element={<ResetPasswordConfirm />} />
                 <Route path="/activate/:uid/:token" element={<VerifyAccounut />} />
 
-                <Route path='/chat' element={<Chat />} />
             </Route>
 
             {/* public routes*/}
             <Route element={<RootLayout />}>
                 <Route index element={<Home />} />
+                <Route path='/chat' element={<ChatAuth />} />
             </Route>
         </Routes>
 

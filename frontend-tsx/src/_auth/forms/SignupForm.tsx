@@ -31,7 +31,7 @@ const SignupForm = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signup, load_user, chat_engine_signup } = bindActionCreators(actionCreators, dispatch);
+  const { signup, chat_engine_signup } = bindActionCreators(actionCreators, dispatch);
 
   const state = useSelector((state: AuthState) => state.authState);
   const { isAuthenticated, errors } = state;

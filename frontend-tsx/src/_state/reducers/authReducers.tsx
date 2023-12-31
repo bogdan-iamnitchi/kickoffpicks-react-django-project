@@ -7,6 +7,7 @@ const initialState: State = {
   access: localStorage.getItem('access') || '',
   refresh: localStorage.getItem('refresh') || '',
   isAuthenticated: false,
+  isChatEngineAuthenticated: false,
   user: null,
   errors: []
 }
@@ -47,34 +48,18 @@ const authReducer = (state: State = initialState, action: Action) => {
     case ActionType.SIGNUP_FAIL:
     case ActionType.GOOGLE_AUTH_FAIL:
     case ActionType.GITHUB_AUTH_FAIL:
-    case ActionType.LOGOUT:
+    case ActionType.CHAT_ENGINE_SIGNUP_FAIL:
+    case ActionType.CHAT_ENGINE_LOGIN_FAIL:
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
 
-        if (action.type === ActionType.SIGNUP_FAIL || action.type === ActionType.LOGIN_FAIL) {
-            if(action.errors) {
-                return {
-                    ...state,
-                    isAuthenticated: false,
-                    access: null,
-                    refresh: null,
-                    errors: action.errors
-                }
-            
-            }
-        }
         return {
             ...state,
             isAuthenticated: false,
+            isChatEngineAuthenticated: false,
             access: null,
             refresh: null,
-            user: null
-        }
-
-    case ActionType.RESET_ERRORS:
-        return {
-            ...state,
-            errors: []
+            errors: action.errors
         }
 
     case ActionType.USER_LOADED_SUCCESS:
@@ -100,10 +85,6 @@ const authReducer = (state: State = initialState, action: Action) => {
             ...state,
             //add a new filed with password to the user
             isChatEngineAuthenticated: true,
-            user: {
-                ...state.user,
-                password: action.payload
-            }
         }
 
     case ActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
@@ -112,15 +93,17 @@ const authReducer = (state: State = initialState, action: Action) => {
             isChatEngineAuthenticated: false,
         }
 
-    case ActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
-    case ActionType.CHAT_ENGINE_LOGIN_SUCCESS:
+    case ActionType.LOGOUT:
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+
         return {
             ...state,
-            //add a new filed with password to the user
-            isChatEngineAuthenticated: false,
+            isAuthenticated: false,
+            access: null,
+            refresh: null,
             user: null
         }
-
     
     case ActionType.PASSWORD_RESET_SUCCESS:
     case ActionType.PASSWORD_RESET_FAIL:

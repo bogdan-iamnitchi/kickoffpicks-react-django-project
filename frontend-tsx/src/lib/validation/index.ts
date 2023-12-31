@@ -51,3 +51,10 @@ export const ResetConfirmValidation = z
     message: "Passwords don't match",
     path: ["confirmPassword"],
 });
+
+export const ChatSignInValidation = z
+.object({
+    password: z.string().min(8, {
+        message: 'Password must be at least 8 characters.' 
+    }),
+});
