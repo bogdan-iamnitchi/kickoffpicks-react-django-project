@@ -1,114 +1,114 @@
-import { ActionType } from "./types"
+import { AuthActionType } from "./types"
 
 interface LoginSuccesAction {
-    type: ActionType.LOGIN_SUCCESS,
+    type: AuthActionType.LOGIN_SUCCESS,
     payload: any
 }
 
 interface LoginFailAction {
-    type: ActionType.LOGIN_FAIL,
+    type: AuthActionType.LOGIN_FAIL,
     errors: any
 }
 
 interface SignupSuccesAction {
-    type: ActionType.SIGNUP_SUCCESS,
+    type: AuthActionType.SIGNUP_SUCCESS,
     payload: any
 }
 
 interface SignupFailAction {
-    type: ActionType.SIGNUP_FAIL,
+    type: AuthActionType.SIGNUP_FAIL,
     errors: any
 }
 
 interface ActivationSuccesAction {
-    type: ActionType.ACTIVATION_SUCCESS,
+    type: AuthActionType.ACTIVATION_SUCCESS,
 }
 
 interface ActivationFailAction {
-    type: ActionType.ACTIVATION_FAIL,
+    type: AuthActionType.ACTIVATION_FAIL,
 }
 
 interface UserLoadedSuccesAction {
-    type: ActionType.USER_LOADED_SUCCESS,
+    type: AuthActionType.USER_LOADED_SUCCESS,
     payload: any
 }
 
 interface UserLoadedFailAction {
-    type: ActionType.USER_LOADED_FAIL,
+    type: AuthActionType.USER_LOADED_FAIL,
 }
 
 interface AuthenticatedSuccesAction {
-    type: ActionType.AUTHENTICATED_SUCCESS,
+    type: AuthActionType.AUTHENTICATED_SUCCESS,
 }
 
 interface AuthenticatedFailAction {
-    type: ActionType.AUTHENTICATED_FAIL,
+    type: AuthActionType.AUTHENTICATED_FAIL,
 }
 
 interface PasswordResetSuccesAction {
-    type: ActionType.PASSWORD_RESET_SUCCESS,
+    type: AuthActionType.PASSWORD_RESET_SUCCESS,
 }
 
 interface PasswordResetFailAction {
-    type: ActionType.PASSWORD_RESET_FAIL,
+    type: AuthActionType.PASSWORD_RESET_FAIL,
 }
 
 interface PasswordResetConfirmSuccesAction {
-    type: ActionType.PASSWORD_RESET_CONFIRM_SUCCESS,
+    type: AuthActionType.PASSWORD_RESET_CONFIRM_SUCCESS,
 }
 
 interface PasswordResetConfirmFailAction {
-    type: ActionType.PASSWORD_RESET_CONFIRM_FAIL,
+    type: AuthActionType.PASSWORD_RESET_CONFIRM_FAIL,
 }
 
 interface GoogleAuthSuccesAction {
-    type: ActionType.GOOGLE_AUTH_SUCCESS,
+    type: AuthActionType.GOOGLE_AUTH_SUCCESS,
     payload: any
 }
 
 interface GoogleAuthFailAction {
-    type: ActionType.GOOGLE_AUTH_FAIL,
+    type: AuthActionType.GOOGLE_AUTH_FAIL,
     errors: any
 }
 
 interface GithubAuthSuccesAction {
-    type: ActionType.GITHUB_AUTH_SUCCESS,
+    type: AuthActionType.GITHUB_AUTH_SUCCESS,
     payload: any
 }
 
 interface GithubAuthFailAction {
-    type: ActionType.GITHUB_AUTH_FAIL,
+    type: AuthActionType.GITHUB_AUTH_FAIL,
     errors: any
 }
 
 interface LogoutAction {
-    type: ActionType.LOGOUT
+    type: AuthActionType.LOGOUT
 }
 
 
 interface ChatEngineLoginAction {
-    type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
+    type: AuthActionType.CHAT_ENGINE_LOGIN_SUCCESS,
     payload: any
 }
 
 interface ChatEngineLoginFailAction {
-    type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+    type: AuthActionType.CHAT_ENGINE_LOGIN_FAIL,
     errors: any
 }
 
 interface ChatEngineSignupAction {
-    type: ActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
+    type: AuthActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
     payload: any
 }
 
 interface ChatEngineSignupFailAction {
-    type: ActionType.CHAT_ENGINE_SIGNUP_FAIL,
+    type: AuthActionType.CHAT_ENGINE_SIGNUP_FAIL,
     errors: any
 }
 
 
 
-export type Action = 
+export type AuthAction = 
     LoginSuccesAction 
     | LoginFailAction
     | SignupSuccesAction
@@ -137,7 +137,7 @@ export type Action =
 
 export type Errors = Array<{ [key: string]: string[] }>
 
-export type State = {
+export type AuthState = {
     access: string,
     refresh: string,
     isAuthenticated: boolean,

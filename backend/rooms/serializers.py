@@ -9,4 +9,4 @@ class RoomSerializer(serializers.ModelSerializer):
 class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Room
-        fields = ('max_players', 'votes_to_skip')
+        fields = ('tournament', 'max_players', 'votes_to_skip')

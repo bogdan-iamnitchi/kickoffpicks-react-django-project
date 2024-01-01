@@ -12,7 +12,7 @@ import { ChatSignInValidation } from "@/lib/validation";
 
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, AuthState} from "@/_state";
+import { authActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 
 import { Chat } from ".";
@@ -31,9 +31,9 @@ const ChatAuth = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { chat_engine_signin, load_user } = bindActionCreators(actionCreators, dispatch);
+  const { chat_engine_signin, load_user } = bindActionCreators(authActionCreators, dispatch);
 
-  const state = useSelector((state: AuthState) => state.authState);
+  const state = useSelector((state: State) => state.authState);
   const { isChatEngineAuthenticated, errors, user } = state;
 
 

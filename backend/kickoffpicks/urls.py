@@ -14,7 +14,7 @@ urlpatterns = [
     path('auth/', include('djoser.social.urls')),
     
     # rooms
-    path('rooms/', include('rooms.urls')),
+    path('rooms-api/', include('rooms.urls')),
 ]
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

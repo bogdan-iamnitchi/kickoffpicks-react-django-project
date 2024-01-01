@@ -1,7 +1,7 @@
 
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "@/_state";
+import { authActionCreators } from "@/_state";
 import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import queryString from "query-string";
@@ -10,7 +10,7 @@ const Google = () => {
     let location = useLocation();
 
     const dispatch = useDispatch();
-    const { googleAuthenticate, load_user } = bindActionCreators(actionCreators, dispatch);
+    const { googleAuthenticate, load_user } = bindActionCreators(authActionCreators, dispatch);
 
     //------------------------------------------------------------------------------
 

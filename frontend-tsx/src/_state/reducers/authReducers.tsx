@@ -1,9 +1,9 @@
-import { State, Action } from "../actions-types";
-import { ActionType } from "../actions-types/types";
+import { AuthState, AuthAction } from "../actions-types/auth";
+import { AuthActionType } from "../actions-types/auth/types";
 
 
 
-const initialState: State = {
+const initialState: AuthState = {
   access: localStorage.getItem('access') || '',
   refresh: localStorage.getItem('refresh') || '',
   isAuthenticated: false,
@@ -12,23 +12,23 @@ const initialState: State = {
   errors: []
 }
 
-const authReducer = (state: State = initialState, action: Action) => {
+const authReducer = (state: AuthState = initialState, action: AuthAction) => {
   switch(action.type) {
-    case ActionType.AUTHENTICATED_SUCCESS:
+    case AuthActionType.AUTHENTICATED_SUCCESS:
         return {
             ...state,
             isAuthenticated: true
         }
 
-    case ActionType.AUTHENTICATED_FAIL:
+    case AuthActionType.AUTHENTICATED_FAIL:
         return {
             ...state,
             isAuthenticated: false
         }
 
-    case ActionType.LOGIN_SUCCESS:
-    case ActionType.GOOGLE_AUTH_SUCCESS:
-    case ActionType.GITHUB_AUTH_SUCCESS:
+    case AuthActionType.LOGIN_SUCCESS:
+    case AuthActionType.GOOGLE_AUTH_SUCCESS:
+    case AuthActionType.GITHUB_AUTH_SUCCESS:
         localStorage.setItem('access', action.payload.access);
         localStorage.setItem('refresh', action.payload.refresh);
         return {
@@ -38,18 +38,18 @@ const authReducer = (state: State = initialState, action: Action) => {
             refresh: action.payload.refresh
         }
 
-    case ActionType.SIGNUP_SUCCESS:
+    case AuthActionType.SIGNUP_SUCCESS:
         return {
             ...state,
             isAuthenticated: false
         }
     
-    case ActionType.LOGIN_FAIL:
-    case ActionType.SIGNUP_FAIL:
-    case ActionType.GOOGLE_AUTH_FAIL:
-    case ActionType.GITHUB_AUTH_FAIL:
-    case ActionType.CHAT_ENGINE_SIGNUP_FAIL:
-    case ActionType.CHAT_ENGINE_LOGIN_FAIL:
+    case AuthActionType.LOGIN_FAIL:
+    case AuthActionType.SIGNUP_FAIL:
+    case AuthActionType.GOOGLE_AUTH_FAIL:
+    case AuthActionType.GITHUB_AUTH_FAIL:
+    case AuthActionType.CHAT_ENGINE_SIGNUP_FAIL:
+    case AuthActionType.CHAT_ENGINE_LOGIN_FAIL:
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
 
@@ -62,7 +62,7 @@ const authReducer = (state: State = initialState, action: Action) => {
             errors: action.errors
         }
 
-    case ActionType.USER_LOADED_SUCCESS:
+    case AuthActionType.USER_LOADED_SUCCESS:
         return {
             ...state,
             user: {
@@ -74,26 +74,26 @@ const authReducer = (state: State = initialState, action: Action) => {
             }
         }
 
-    case ActionType.USER_LOADED_FAIL:
+    case AuthActionType.USER_LOADED_FAIL:
         return {
             ...state,
             user: null
         }
     
-    case ActionType.CHAT_ENGINE_LOGIN_SUCCESS:
+    case AuthActionType.CHAT_ENGINE_LOGIN_SUCCESS:
         return {
             ...state,
             //add a new filed with password to the user
             isChatEngineAuthenticated: true,
         }
 
-    case ActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
+    case AuthActionType.CHAT_ENGINE_SIGNUP_SUCCESS:
         return {
             ...state,
             isChatEngineAuthenticated: false,
         }
 
-    case ActionType.LOGOUT:
+    case AuthActionType.LOGOUT:
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
 
@@ -105,12 +105,12 @@ const authReducer = (state: State = initialState, action: Action) => {
             user: null
         }
     
-    case ActionType.PASSWORD_RESET_SUCCESS:
-    case ActionType.PASSWORD_RESET_FAIL:
-    case ActionType.PASSWORD_RESET_CONFIRM_SUCCESS:
-    case ActionType.PASSWORD_RESET_CONFIRM_FAIL:
-    case ActionType.ACTIVATION_SUCCESS:
-    case ActionType.ACTIVATION_FAIL:
+    case AuthActionType.PASSWORD_RESET_SUCCESS:
+    case AuthActionType.PASSWORD_RESET_FAIL:
+    case AuthActionType.PASSWORD_RESET_CONFIRM_SUCCESS:
+    case AuthActionType.PASSWORD_RESET_CONFIRM_FAIL:
+    case AuthActionType.ACTIVATION_SUCCESS:
+    case AuthActionType.ACTIVATION_FAIL:
         return {
             ...state
         }

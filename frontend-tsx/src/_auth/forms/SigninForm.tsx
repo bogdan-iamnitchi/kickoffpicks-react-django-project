@@ -14,7 +14,7 @@ import { Navigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators, AuthState} from "@/_state";
+import { authActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 
 const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
@@ -29,9 +29,9 @@ const SigninForm = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { signin } = bindActionCreators(actionCreators, dispatch);
+  const { signin } = bindActionCreators(authActionCreators, dispatch);
 
-  const state = useSelector((state: AuthState) => state.authState);
+  const state = useSelector((state: State) => state.authState);
   const { isAuthenticated, errors } = state;
 
   //------------------------------------------------------------------------------

@@ -11,7 +11,7 @@ import { Navigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "@/_state";
+import { authActionCreators } from "@/_state";
 import { useState } from "react";
 
 const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
@@ -24,7 +24,7 @@ const ResetPassword = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { reset_password } = bindActionCreators(actionCreators, dispatch);
+  const { reset_password } = bindActionCreators(authActionCreators, dispatch);
 
   //------------------------------------------------------------------------------
 
