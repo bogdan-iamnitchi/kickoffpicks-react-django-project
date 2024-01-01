@@ -12,7 +12,6 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         }
     };
     
-    // console.log(username, secret);
 
     try {
         const res = await axios.get(
@@ -28,7 +27,6 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         dispatch<any>(load_user());
 
     } catch (err) {
-        // console.log(err);
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({

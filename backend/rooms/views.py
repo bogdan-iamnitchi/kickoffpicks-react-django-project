@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, generics
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 from .models import Room
 from .room_bll import *
 
@@ -25,7 +25,7 @@ class RoomView(APIView):
         
 class GetRoom(APIView):
     serializer_class = RoomSerializer
-    lookup_url_kwarg = 'room_code'
+    lookup_url_kwarg = 'code'
     
     def get(self, request, format=None):
         room_code = request.GET.get(self.lookup_url_kwarg)
@@ -55,8 +55,37 @@ class CreateRoom(APIView):
             return Response({"Error": "Bad Request"}, status=status.HTTP_400_BAD_REQUEST)
         
 
+class UpdateRoom(APIView):
+    serializer_class = UpdateRoomSerializer
+
+    def patch(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            max_players = serializer.data.get('max_players')
+            votes_to_skip = serializer.data.get('votes_to_skip')
+            code = serializer.data.get('code')
+
+            queryset = Room.objects.filter(code=code)
+            if not queryset.exists():
+                return Response({'msg': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+            room = queryset[0]
+            user_id = self.request.session.session_key
+            if room.host != user_id:
+                return Response({'msg': 'You are not the host of this room.'}, status=status.HTTP_403_FORBIDDEN)
+
+            room.max_players = max_players
+            room.votes_to_skip = votes_to_skip
+            room.save(update_fields=['max_players', 'votes_to_skip'])
+            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+
+        return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
+
 class JoinRoom(APIView):
-    lookup_url_kwarg = 'room_code'
+    lookup_url_kwarg = 'code'
     
     def post(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):

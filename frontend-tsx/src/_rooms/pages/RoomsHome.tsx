@@ -16,7 +16,7 @@ const RoomsHome = () => {
             </Button>
 
             <Button type="button" className="shad-button_green m-1">
-                <Link className="nav-link" to="/create-room">CREATE A ROOM</Link>
+                <Link className="nav-link" to="/create-update-room">CREATE A ROOM</Link>
             </Button>
         </div>
 

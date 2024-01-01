@@ -11,10 +11,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { toast } from "@/components/ui/use-toast"
 import { Input } from "@/components/ui/input"
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
  
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { roomActionCreators, State} from "@/_state";
+import { useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast"
+
 const FormSchema = z
 .object({
 
@@ -28,23 +33,74 @@ const FormSchema = z
 
 const JoinRoom = () => {
 
+    const { toast } = useToast()
+    const [checkedErrors, setCheckedErrors] = useState(false);
+    const [roomCode, setRoomCode] = useState('');
+
+    //------------------------------------------------------------------------------
+
+    const dispatch = useDispatch();
+    const { joinRoom } = bindActionCreators(roomActionCreators, dispatch);
+
+    const state = useSelector((state: State) => state.roomState);
+    const { errors, isJoinedRoom } = state;
+
+    //------------------------------------------------------------------------------
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             code: '',
-          },
+        },
     });
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        toast({
-          title: "You submitted the following values:",
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-            </pre>
-          ),
-        })
-      }
+    useEffect(() => {
+        // This useEffect will be triggered whenever 'errors' in the state changes
+        if(checkedErrors){
+            
+            for (let type in errors) {
+                toast({
+                title: "Join Room Failed!",
+                variant: "destructive",
+                description: errors[type].toString(),
+                });
+                console.log(errors[type]);
+            }
+            setCheckedErrors(false);
+        }
+    
+      }, [errors]);
+
+    const onSubmit = (data: z.infer<typeof FormSchema>) => {
+        try {
+            
+            joinRoom(data.code);
+
+            setRoomCode(data.code);
+            setCheckedErrors(true);
+
+            if (isJoinedRoom) {
+                toast({
+                    title: "Join Room successfully!",
+                    variant: "success",
+                    description: "Wait for the host ot start the game.",
+                });
+            }
+
+    
+        } catch (err) {
+            toast({
+                title: "Join Room Failed!",
+                variant: "destructive",
+                description: "Something Wrong, try again", // Assuming the error object has a message property
+            });
+            console.error(err);
+        }
+    }
+
+    if (isJoinedRoom) {
+        return <Navigate to={`/room/${roomCode}`} />;
+    }
 
     return (
     <div className="sm:w-420 flex-center flex-col">
