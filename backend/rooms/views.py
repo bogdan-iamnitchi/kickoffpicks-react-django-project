@@ -144,4 +144,34 @@ class LeaveRoom(APIView):
                 room.delete()
                 return Response({"message" : "Success"}, status=status.HTTP_200_OK)
                 
-        return Response({"Bad Request":"Room code not found in request."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"Bad Request":"Room code not found in session."}, status=status.HTTP_400_BAD_REQUEST)
+    
+class StartRoom(APIView):
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+            
+        host_id = self.request.session.session_key
+        queryset = Room.objects.filter(host=host_id)
+        if len(queryset) > 0:
+            room = queryset[0]
+            room.started = True
+            room.save(update_fields=['started'])
+            return Response({"message" : "Success"}, status=status.HTTP_200_OK)
+        
+        return Response({"Bad Request":"Room not found"}, status=status.HTTP_400_BAD_REQUEST)
+    
+class EndRoom(APIView):
+    def post(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+            
+        host_id = self.request.session.session_key
+        queryset = Room.objects.filter(host=host_id)
+        if len(queryset) > 0:
+            room = queryset[0]
+            room.started = False
+            room.save(update_fields=['started'])
+            return Response({"message" : "Success"}, status=status.HTTP_200_OK)
+        
+        return Response({"Bad Request":"Room not found"}, status=status.HTTP_400_BAD_REQUEST)

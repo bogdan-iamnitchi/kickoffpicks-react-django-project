@@ -12,15 +12,13 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Navigate, useParams } from "react-router-dom"
-import { Input } from "@/components/ui/input"
  
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { roomActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 import { toast, useToast } from "@/components/ui/use-toast"
-import RoomSettings from "../components/RoomSettings"
+
 
 const FormSchema = z
 .object({
@@ -38,8 +36,8 @@ const RoomQuestion = () => {
     const dispatch = useDispatch();
     const { loadRoomDetails } = bindActionCreators(roomActionCreators, dispatch);
 
-    // const state = useSelector((state: State) => state.roomState);
-    // const { tournament, maxPlayers, votesToSkip, isRoomCreated, isJoinedRoom, isHost, errors} = state;
+    const state = useSelector((state: State) => state.roomState);
+    const { errors} = state;
 
     //------------------------------------------------------------------------------
 

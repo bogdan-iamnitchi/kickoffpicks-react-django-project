@@ -60,6 +60,25 @@ interface LeaveRoomFailAction {
     errors: any
 }
 
+interface StartRoomSuccessAction {
+    type: RoomActionType.START_ROOM_SUCCESS,
+    payload: any
+}
+
+interface StartRoomFailAction {
+    type: RoomActionType.START_ROOM_FAIL,
+    errors: any
+}
+
+interface EndRoomSuccessAction {
+    type: RoomActionType.END_ROOM_SUCCESS,
+    payload: any
+}
+
+interface EndRoomFailAction {
+    type: RoomActionType.END_ROOM_FAIL,
+    errors: any
+}
 
 export type RoomAction = 
     CreateUpdateRoomSuccessAction 
@@ -74,7 +93,10 @@ export type RoomAction =
     | UserinRoomFailAction
     | LeaveRoomSuccessAction
     | LeaveRoomFailAction
-    
+    | StartRoomSuccessAction
+    | StartRoomFailAction
+    | EndRoomSuccessAction
+    | EndRoomFailAction
 
 
 export type Errors = Array<{ [key: string]: string[] }>

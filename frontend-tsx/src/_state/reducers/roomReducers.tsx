@@ -56,14 +56,28 @@ const roomReducer = (state: RoomState = initialState, action: RoomAction) => {
     case RoomActionType.LOAD_ROOM_DETAILS_SUCCESS:
         return {
             ...state,
-            roomCode: action.payload.code,
             tournament: action.payload.tournament,
             maxPlayers: action.payload.max_players,
             votesToSkip: action.payload.votes_to_skip,
 
+            roomCode: action.payload.code,
+            roomStarted: action.payload.started,
+
             isHost: action.payload.is_host,
         }
     
+    case RoomActionType.START_ROOM_SUCCESS:
+        return {
+            ...state,
+            roomStarted: true,
+        }
+    
+    case RoomActionType.END_ROOM_SUCCESS:
+        return {
+            ...state,
+            roomStarted: false,
+        }
+
     case RoomActionType.LEAVE_ROOM_SUCCESS:
         return {
             ...state,

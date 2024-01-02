@@ -18,3 +18,5 @@ class Room(models.Model):
     tournament = models.CharField(max_length=50, unique=False)
     max_players = models.IntegerField(null=False, default=2)
     votes_to_skip = models.IntegerField(null=False, default=1)
+    
+    started = models.BooleanField(null=False, default=False)

@@ -288,3 +288,97 @@ export const leaveRoom = () => async (dispatch: Dispatch<RoomAction>) => {
     }
 
 };
+
+export const startRoom = () => async (dispatch: Dispatch<RoomAction>) => {
+
+    const config = {
+        headers: {
+            "Authorization": `JWT ${localStorage.getItem('access')}`,
+        },
+        withCredentials: true,
+    };
+
+    const body = {
+        "code": "",
+    }
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/rooms-api/start-room/`,
+            body,
+            config
+        );
+        
+        console.log(res.data);
+
+        dispatch({
+            type: RoomActionType.START_ROOM_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: RoomActionType.START_ROOM_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: RoomActionType.START_ROOM_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
+export const endRoom = () => async (dispatch: Dispatch<RoomAction>) => {
+
+    const config = {
+        headers: {
+            "Authorization": `JWT ${localStorage.getItem('access')}`,
+        },
+        withCredentials: true,
+    };
+
+    const body = {
+        "code": "",
+    }
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/rooms-api/end-room/`,
+            body,
+            config
+        );
+        
+        console.log(res.data);
+
+        dispatch({
+            type: RoomActionType.END_ROOM_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: RoomActionType.END_ROOM_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: RoomActionType.END_ROOM_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};

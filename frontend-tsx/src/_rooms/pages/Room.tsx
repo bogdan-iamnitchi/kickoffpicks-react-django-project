@@ -1,6 +1,5 @@
 
 import { useForm } from "react-hook-form"
-import * as z from "zod"
  
 import { Button } from "@/components/ui/button"
 import {
@@ -18,11 +17,10 @@ import { bindActionCreators } from "redux";
 import { roomActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast"
+
 import RoomSettings from "../components/RoomSettings"
 import RoomQuestion from "../components/RoomQuestion"
 import RoomStart from "../components/RoomStart"
-import RoomHomeStart from "../components/RoomHostStart"
-import RoomHostStart from "../components/RoomHostStart"
 
 const Room= () => {
 
@@ -83,7 +81,7 @@ const Room= () => {
 
     useEffect(() => {
         
-        loadRoomRequest(code);
+        loadRoomRequest();
         setCheckedErrors(true);
 
         if(!messageDisplay) {
@@ -107,7 +105,19 @@ const Room= () => {
         }
       }, []);
 
-    const loadRoomRequest = (code: string) => {
+    useEffect(() => {
+
+        loadRoomRequest();
+
+        // automaticaly load room details every 1 second
+        // const intreval = setInterval(loadRoomRequest, 1000);
+        // return () => {
+        //     clearInterval(intreval);
+        // };
+
+    }, [roomStarted]);
+
+    const loadRoomRequest = () => {
         try {
 
             loadRoomDetails(code);
@@ -236,11 +246,7 @@ const Room= () => {
             roomStarted ? (
                 <RoomQuestion />
             ) : (
-                isHost ? (
-                    <RoomHostStart />
-                ) : (
-                    <RoomStart />
-                )
+                <RoomStart isHost={isHost}/>
             )
         )}
 

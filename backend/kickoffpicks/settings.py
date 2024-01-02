@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     
     'accounts.apps.AccountsConfig',
     'rooms.apps.RoomsConfig',
+    'questions.apps.QuestionsConfig',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
