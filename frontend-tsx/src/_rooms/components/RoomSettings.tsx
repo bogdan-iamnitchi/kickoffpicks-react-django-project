@@ -36,9 +36,10 @@ const FormSchema = z
 
 interface CreateUpdateRoomProps {
     updateCallback?: () => void;
+    backCallback?: () => void;
 }
 
-const RoomSettings: React.FC<CreateUpdateRoomProps> = ({ updateCallback }) => {
+const RoomSettings: React.FC<CreateUpdateRoomProps> = ({ updateCallback, backCallback }) => {
 
     const { toast } = useToast()
     const [checkedErrors, setCheckedErrors] = useState(false);
@@ -143,7 +144,7 @@ const RoomSettings: React.FC<CreateUpdateRoomProps> = ({ updateCallback }) => {
             <div className="flex flex-row mt-2">
                 <Button type="button" 
                     className="shad-button_red m-1"
-                    onClick={updateCallback}>
+                    onClick={backCallback}>
                     BACK
                 </Button>
 

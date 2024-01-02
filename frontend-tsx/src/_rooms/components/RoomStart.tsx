@@ -92,7 +92,7 @@ const RoomStart: React.FC<RoomStartProps> = ({isHost}) => {
                 - You can change anytime the room settings:
             </h2>
             <h2 className="text-base text-center">
-                - You can use the chat share the room code with your friends so they can join the room:
+                - You can use the chat to share the room code with your friends so they can join the room:
             </h2>
         </>
         );

@@ -21,6 +21,7 @@ import { useToast } from "@/components/ui/use-toast"
 import RoomSettings from "../components/RoomSettings"
 import RoomQuestion from "../components/RoomQuestion"
 import RoomStart from "../components/RoomStart"
+import RoomMakeQuizz from "../components/RoomMakeQuizz"
 
 const Room= () => {
 
@@ -32,6 +33,7 @@ const Room= () => {
     let code = '';
     params.code == undefined? code = '' : code = params.code;
 
+    const [showMakeQuizz, setShowMakeQuizz] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [leavedRoom, setLeavedRoom] = useState(false);
 
@@ -150,19 +152,35 @@ const Room= () => {
         }
     }
 
-    const settingsClick = () => {
-        setShowSettings(!showSettings);
-    }
-
+    
     const updateCallback = () => {
-
+        
         toast({
             title: "Updated Room Success!",
             variant: "success",
             description: `You have successfully updated the room ${code}.`,
         });
-
+        
         setShowSettings(false);
+    }
+
+    const saveCallback = () => {
+        
+        toast({
+            title: "Question Saved Success!",
+            variant: "success",
+            description: `You have successfully created a question.`,
+        });
+        
+        setShowSettings(false);
+    }
+
+    const makeQuizzClick = () => {
+        setShowMakeQuizz(!showMakeQuizz);
+    }
+
+    const settingsClick = () => {
+        setShowSettings(!showSettings);
     }
 
     const leaveClick = () => {
@@ -241,12 +259,16 @@ const Room= () => {
         <div className="border-t-2 border-white w-full"></div>
 
         {showSettings ? (
-            <RoomSettings updateCallback={updateCallback} />
+            <RoomSettings updateCallback={updateCallback} backCallback={settingsClick}/>
         ) : (
             roomStarted ? (
                 <RoomQuestion />
             ) : (
-                <RoomStart isHost={isHost}/>
+                showMakeQuizz ? (
+                    <RoomMakeQuizz saveCallback={saveCallback} backCallback={settingsClick}/>
+                ) : (
+                    <RoomStart isHost={isHost}/>
+                )
             )
         )}
 
@@ -260,11 +282,20 @@ const Room= () => {
                     {renderRoomDetails()}
 
                     <Button type="button" 
+                    className="shad-button_green w-420"
+                    onClick={makeQuizzClick}
+                    >
+                        {showMakeQuizz ? "CLOSE MAKE QUIZZ" : "MAKE QUIZZ"}
+                    </Button>
+
+                    <Button type="button" 
                     className={showSettings ? "shad-button_primary w-420" : "shad-button_primary w-420" } 
                     onClick={settingsClick}
                     >
                         {showSettings ? "CLOSE SETTINGS" : "SHOW SETTINGS"}
                     </Button>
+
+                    
                 </>
             ) : (<></>)}
 
