@@ -7,9 +7,12 @@ const initialState: RoomState = {
     maxPlayers: 3,
     votesToSkip: 2,
 
-    roomCode: '',
     isRoomCreated: false,
     isJoinedRoom: false,
+    isHost: false,
+
+    roomCode: '',
+    roomStarted: false,
 
     errors: []
 }
@@ -25,6 +28,8 @@ const roomReducer = (state: RoomState = initialState, action: RoomAction) => {
             votesToSkip: action.payload.votes_to_skip,
 
             isRoomCreated: true,
+            isJoinedRoom: true,
+
             roomCode: action.payload.code,
         }
 
@@ -35,25 +40,17 @@ const roomReducer = (state: RoomState = initialState, action: RoomAction) => {
             votesToSkip: action.payload.votes_to_skip,
         }
 
+    case RoomActionType.USER_IN_ROOM_SUCCESS:
+        return {
+            ...state,
+            isJoinedRoom: true,
+            roomCode: action.payload.code,
+        }
+
     case RoomActionType.JOIN_ROOM_SUCCESS:
         return {
             ...state,
             isJoinedRoom: true,
-        }
-
-    case RoomActionType.CREATE_ROOM_FAIL:
-    case RoomActionType.JOIN_ROOM_FAIL:
-        return {
-            ...state,
-            tournament: initialState.tournament,
-            maxPlayers: initialState.maxPlayers,
-            votesToSkip: initialState.votesToSkip,
-
-            roomCode: '',
-            isRoomCreated: false,
-            isJoinedRoom: false,
-
-            errors: action.errors
         }
 
     case RoomActionType.LOAD_ROOM_DETAILS_SUCCESS:
@@ -67,12 +64,45 @@ const roomReducer = (state: RoomState = initialState, action: RoomAction) => {
             isHost: action.payload.is_host,
         }
     
+    case RoomActionType.LEAVE_ROOM_SUCCESS:
+        return {
+            ...state,
+            tournament: initialState.tournament,
+            maxPlayers: initialState.maxPlayers,
+            votesToSkip: initialState.votesToSkip,
+
+            isRoomCreated: false,
+            isJoinedRoom: false,
+            isHost: false,
+            
+            roomCode: '',
+            roomStarted: false,
+
+            errors: []
+        }
+
+    case RoomActionType.USER_IN_ROOM_FAIL:
+    case RoomActionType.CREATE_ROOM_FAIL:
+    case RoomActionType.JOIN_ROOM_FAIL:
+    case RoomActionType.LEAVE_ROOM_FAIL:
     case RoomActionType.LOAD_ROOM_DETAILS_FAIL:
     case RoomActionType.UPDATE_ROOM_FAIL:
         return {
             ...state,
+            tournament: initialState.tournament,
+            maxPlayers: initialState.maxPlayers,
+            votesToSkip: initialState.votesToSkip,
+
+            isRoomCreated: false,
+            isJoinedRoom: false,
+            isHost: false,
+            
+            roomCode: '',
+            roomStarted: false,
+
             errors: action.errors
         }
+
     default:
         return state;
 

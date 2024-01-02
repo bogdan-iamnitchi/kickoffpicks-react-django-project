@@ -59,6 +59,8 @@ const JoinRoom = () => {
         if(checkedErrors){
             
             for (let type in errors) {
+                if(type === 'code' || errors[type].toString() ==='[object Object]')
+                    continue;
                 toast({
                 title: "Join Room Failed!",
                 variant: "destructive",

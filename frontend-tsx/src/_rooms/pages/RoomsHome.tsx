@@ -1,8 +1,43 @@
 import { Button } from "@/components/ui/button"
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { bindActionCreators } from "redux";
+import { roomActionCreators, State} from "@/_state";
+import { useEffect } from "react";
 
 const RoomsHome = () => {
-  return (
+
+    //------------------------------------------------------------------------------
+
+    const dispatch = useDispatch();
+    const { userInRoom } = bindActionCreators(roomActionCreators, dispatch);
+
+    const state = useSelector((state: State) => state.roomState);
+    const { isJoinedRoom, roomCode} = state;
+
+    //------------------------------------------------------------------------------
+
+    const userInRoomRequest = () => {
+        try {
+            userInRoom();
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    useEffect(() => {
+
+        userInRoomRequest();
+
+    }, []);
+
+    if (isJoinedRoom) {
+        return <Navigate to={`/room/${roomCode}`} />;
+    }
+
+    return (
     <div className="sm:w-420 flex-center flex-col">
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
             Kick Off Picks - Quizz Party
@@ -25,7 +60,7 @@ const RoomsHome = () => {
         </Button>
         
     </div>
-  )
+    )
 }
 
 export default RoomsHome;

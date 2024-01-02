@@ -35,13 +35,7 @@ const FormSchema = z
     }),
 })
 
-type tournamentType = "Liga1 - Superliga" | "Champions League" | "World Cup";
-
-interface CreateUpdateRoomProps {
-    isUpdate?: boolean;
-}
-
-const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
+const CreateUpdateRoom = () => {
 
     const { toast } = useToast()
     const [checkedErrors, setCheckedErrors] = useState(false);
@@ -49,7 +43,7 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
     //------------------------------------------------------------------------------
 
     const dispatch = useDispatch();
-    const { createRoom, updateRoom} = bindActionCreators(roomActionCreators, dispatch);
+    const { createRoom } = bindActionCreators(roomActionCreators, dispatch);
 
     const state = useSelector((state: State) => state.roomState);
     const { tournament, maxPlayers, votesToSkip, isRoomCreated, roomCode, errors} = state;
@@ -68,8 +62,9 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
     useEffect(() => {
         // This useEffect will be triggered whenever 'errors' in the state changes
         if(checkedErrors){
-            
             for (let type in errors) {
+                if(type === 'code' || errors[type].toString() ==='[object Object]')
+                    continue;
                 toast({
                 title: "Create Room Failed!",
                 variant: "destructive",
@@ -83,29 +78,12 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
       }, [errors]);
 
 
-    const createRoomRequest = (tournament: tournamentType, max_players: number, votes_to_skip: number) =>  {
-        createRoom(tournament, max_players, votes_to_skip);
-
-        setCheckedErrors(true);
-    }
-
-    const createUpdateRequest = (max_players: number, votes_to_skip: number) =>  {
-        updateRoom(max_players, votes_to_skip, roomCode);
-
-        setCheckedErrors(true);
-    }
-
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
 
         try {
             
-            if(isUpdate){
-                createUpdateRequest(data.max_players, data.votes_to_skip);
-            }
-            else {
-                createRoomRequest(data.tournament, data.max_players, data.votes_to_skip);
-            }
-
+            createRoom(data.tournament, data.max_players, data.votes_to_skip);
+            setCheckedErrors(true);
     
         } catch (err) {
             toast({
@@ -119,32 +97,6 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
 
     if (isRoomCreated) {
         return <Navigate to={`/room/${roomCode}`} />;
-    }
-
-    const renderCreateTitle = () => {
-        return (
-            <>
-                <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
-                    Kick Off Picks - Create Room
-                </h2>
-                <p className="text-light-3 small-medium md:base-regular mt-2">
-                    Welcome back! Please provide some details.
-                </p>
-            </>
-        );
-    }
-
-    const renderUpdateTitle = () => {
-        return (
-            <>
-                <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
-                    Kick Off Picks - Update Room
-                </h2>
-                <p className="text-light-3 small-medium md:base-regular text-center mt-2">
-                    Welcome back! Because you are the host you can change some settings.
-                </p>
-            </>
-        );
     }
 
     const renderRadioGroup = () => {
@@ -197,7 +149,7 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
                 className="flex-center flex-col gap-5 ml-4 mt-4 mb-4">
                     
                     {/* render radio group */}
-                    { isUpdate ? null : renderRadioGroup() } 
+                    {renderRadioGroup() } 
 
                     <FormField
                     control={form.control}
@@ -244,7 +196,7 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
                 </Button>
 
                 <Button type="submit" className="shad-button_green m-1">
-                    {isUpdate ? "UPDATE THE ROOM" : "CREATE A ROOM"}
+                    CREATE A ROOM
                 </Button>
             </div>
         );
@@ -253,15 +205,17 @@ const CreateUpdateRoom: React.FC<CreateUpdateRoomProps> = ({ isUpdate }) => {
     return (
     <div className="sm:w-420 flex-center flex-col">
 
-        {isUpdate ? renderUpdateTitle() : renderCreateTitle()}
+        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
+            Kick Off Picks - Create Room
+        </h2>
+        <p className="text-light-3 small-medium md:base-regular mt-2">
+            Welcome back! Please provide some details.
+        </p>
+
         {renderFormWithButtons()}
         
     </div>
     )
-}
-
-CreateUpdateRoom.defaultProps = {
-    isUpdate: false,
 }
 
 export default CreateUpdateRoom;

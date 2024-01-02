@@ -9,7 +9,8 @@ export const createRoom = (tournament: string, max_players: number, votes_to_ski
     const config = {
         headers: {
             "Authorization": `JWT ${localStorage.getItem('access')}`,
-        }
+        },
+        withCredentials: true,
     };
 
     const body = {
@@ -25,12 +26,15 @@ export const createRoom = (tournament: string, max_players: number, votes_to_ski
             config
         );
         
-        console.log(res.data);
+        // console.log(res.data);
 
         dispatch({
             type: RoomActionType.CREATE_ROOM_SUCCESS,
             payload: res.data
         });
+
+        console.log(res.data.code);
+        // dispatch<any>(loadRoomDetails(res.data.code))
 
     } catch (err) {
         if (axios.isAxiosError(err)) {
@@ -56,7 +60,8 @@ export const updateRoom = (max_players: number, votes_to_skip: number, code: str
     const config = {
         headers: {
             "Authorization": `JWT ${localStorage.getItem('access')}`,
-        }
+        },
+        withCredentials: true,
     };
 
     const body = {
@@ -104,7 +109,8 @@ export const joinRoom = (code: string) => async (dispatch: Dispatch<RoomAction>)
     const config = {
         headers: {
             "Authorization": `JWT ${localStorage.getItem('access')}`,
-        }
+        },
+        withCredentials: true,
     };
 
     const body = {
@@ -149,7 +155,8 @@ export const loadRoomDetails = (code: string) => async (dispatch: Dispatch<RoomA
     const config = {
         headers: {
             "Authorization": `JWT ${localStorage.getItem('access')}`,
-        }
+        },
+        withCredentials: true,
     };
 
     try {
@@ -166,6 +173,7 @@ export const loadRoomDetails = (code: string) => async (dispatch: Dispatch<RoomA
         });
 
     } catch (err) {
+        console.log(err);
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({
@@ -177,6 +185,103 @@ export const loadRoomDetails = (code: string) => async (dispatch: Dispatch<RoomA
         else {
             dispatch({
                 type: RoomActionType.LOAD_ROOM_DETAILS_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
+export const userInRoom = () => async (dispatch: Dispatch<RoomAction>) => {
+
+    const config = {
+        headers: {
+            "Authorization": `JWT ${localStorage.getItem('access')}`,
+        },
+        withCredentials: true,
+    };
+
+    try {
+        const res = await axios.get(
+            `${import.meta.env.VITE_APP_API_URL}/rooms-api/user-in-room/`,
+            config
+        );
+        
+        console.log(res.data);
+
+        if(res.data.code == null) {
+            dispatch({
+                type: RoomActionType.USER_IN_ROOM_FAIL,
+                errors: []
+            });
+        }
+        else {
+            dispatch({
+                type: RoomActionType.USER_IN_ROOM_SUCCESS,
+                payload: res.data
+            });
+        }
+
+    } catch (err) {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: RoomActionType.USER_IN_ROOM_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: RoomActionType.USER_IN_ROOM_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
+export const leaveRoom = () => async (dispatch: Dispatch<RoomAction>) => {
+
+    const config = {
+        headers: {
+            "Authorization": `JWT ${localStorage.getItem('access')}`,
+        },
+        withCredentials: true,
+    };
+
+    const body = {
+        "code": "",
+    }
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/rooms-api/leave-room/`,
+            body,
+            config
+        );
+        
+        console.log(res.data);
+
+        dispatch({
+            type: RoomActionType.LEAVE_ROOM_SUCCESS,
+            payload: res.data
+        });
+
+    } catch (err) {
+        console.log(err);
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: RoomActionType.LEAVE_ROOM_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: RoomActionType.LEAVE_ROOM_FAIL,
                 errors: []
             });
         }

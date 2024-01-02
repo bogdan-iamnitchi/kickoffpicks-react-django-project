@@ -40,6 +40,26 @@ interface LoadRoomFailAction {
     errors: any
 }
 
+interface UserinRoomSuccessAction {
+    type: RoomActionType.USER_IN_ROOM_SUCCESS,
+    payload: any
+}
+
+interface UserinRoomFailAction {
+    type: RoomActionType.USER_IN_ROOM_FAIL,
+    errors: any
+}
+
+interface LeaveRoomSuccessAction {
+    type: RoomActionType.LEAVE_ROOM_SUCCESS,
+    payload: any
+}
+
+interface LeaveRoomFailAction {
+    type: RoomActionType.LEAVE_ROOM_FAIL,
+    errors: any
+}
+
 
 export type RoomAction = 
     CreateUpdateRoomSuccessAction 
@@ -50,6 +70,10 @@ export type RoomAction =
     | JoinRoomFailAction
     | LoadRoomSuccessAction
     | LoadRoomFailAction
+    | UserinRoomSuccessAction
+    | UserinRoomFailAction
+    | LeaveRoomSuccessAction
+    | LeaveRoomFailAction
     
 
 
@@ -60,9 +84,12 @@ export type RoomState = {
     maxPlayers: number,
     votesToSkip: number,
     
-    roomCode: string,
     isRoomCreated: boolean,
     isJoinedRoom: boolean,
+    isHost: boolean,
+
+    roomCode: string,
+    roomStarted: boolean,
 
     errors: Errors,
 }
