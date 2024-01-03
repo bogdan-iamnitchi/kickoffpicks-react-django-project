@@ -159,6 +159,7 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ backCallback }) => {
                 variant: "destructive",
                 description: "Please select a correct answer", // Assuming the error object has a message property
             });
+            return;
         }
 
         let correctChoice = "";

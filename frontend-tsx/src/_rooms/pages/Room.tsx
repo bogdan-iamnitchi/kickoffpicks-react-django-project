@@ -146,7 +146,9 @@ const Room = () => {
         try {
 
             leaveRoom();
-            deleteQuestion(code);
+            if(isHost) {
+                deleteQuestion(code);
+            }
 
             setLeavedRoom(true);
             setCheckedErrors(true);

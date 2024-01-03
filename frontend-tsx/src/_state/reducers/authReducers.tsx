@@ -100,6 +100,7 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
         return {
             ...state,
             isAuthenticated: false,
+            isChatEngineAuthenticated: false,
             access: null,
             refresh: null,
             user: null
