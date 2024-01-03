@@ -70,6 +70,16 @@ interface StartRoomFailAction {
     errors: any
 }
 
+interface StatusRoomSuccessAction {
+    type: RoomActionType.STATUS_ROOM_SUCCESS,
+    payload: any
+}
+
+interface StatusRoomFailAction {
+    type: RoomActionType.STATUS_ROOM_FAIL,
+    errors: any
+}
+
 interface EndRoomSuccessAction {
     type: RoomActionType.END_ROOM_SUCCESS,
     payload: any
@@ -95,6 +105,8 @@ export type RoomAction =
     | LeaveRoomFailAction
     | StartRoomSuccessAction
     | StartRoomFailAction
+    | StatusRoomSuccessAction
+    | StatusRoomFailAction
     | EndRoomSuccessAction
     | EndRoomFailAction
 

@@ -78,9 +78,8 @@ const RoomSettings: React.FC<CreateUpdateRoomProps> = ({ updateCallback, backCal
             }
             setCheckedErrors(false);
         }
-    
-      }, [errors]);
 
+    }, [errors]);
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
 
@@ -89,7 +88,13 @@ const RoomSettings: React.FC<CreateUpdateRoomProps> = ({ updateCallback, backCal
             updateRoom(data.max_players, data.votes_to_skip, roomCode);
             setCheckedErrors(true);
 
-            if (updateCallback) {
+            toast({
+                title: "Updated Room Success!",
+                variant: "success",
+                description: `You have successfully updated the room ${roomCode}.`,
+            });
+
+            if(updateCallback){
                 updateCallback();
             }
     

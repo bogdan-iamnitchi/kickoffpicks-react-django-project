@@ -78,6 +78,12 @@ const roomReducer = (state: RoomState = initialState, action: RoomAction) => {
             roomStarted: false,
         }
 
+    case RoomActionType.END_ROOM_SUCCESS:
+        return {
+            ...state,
+            roomStarted: action.payload.started,
+        }
+
     case RoomActionType.LEAVE_ROOM_SUCCESS:
         return {
             ...state,

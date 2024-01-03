@@ -9,7 +9,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
@@ -18,13 +17,11 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { roomActionCreators, State} from "@/_state";
+import { questionActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group"
  
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import Combobox from "react-widgets/Combobox";
 
 import {
     Command,
@@ -71,16 +68,15 @@ const FormSchema = z
     
 })
 
-
 interface CreateUpdateRoomProps {
-    saveCallback?: () => void;
     backCallback?: () => void;
 }
 
-const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCallback }) => {
+const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ backCallback }) => {
 
     const { toast } = useToast()
     const [checkedErrors, setCheckedErrors] = useState(false);
+    const [errorsFlag, setErrorsFlag] = useState(false);
 
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
@@ -88,10 +84,13 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCall
     //------------------------------------------------------------------------------
 
     const dispatch = useDispatch();
-    const { updateRoom} = bindActionCreators(roomActionCreators, dispatch);
+    const { createQuestion } = bindActionCreators(questionActionCreators, dispatch);
 
-    const state = useSelector((state: State) => state.roomState);
-    const { tournament, maxPlayers, votesToSkip, roomCode, errors} = state;
+    const roomState = useSelector((state: State) => state.roomState);
+    const { roomCode } = roomState;
+    
+    const questionState = useSelector((state: State) => state.questionState);
+    const { nrOfQuestions, isQuestionCreated, errors} = questionState;
 
     //------------------------------------------------------------------------------
 
@@ -112,17 +111,45 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCall
                 if(type === 'code' || errors[type].toString() ==='[object Object]')
                     continue;
                 toast({
-                title: "Update Room Failed!",
-                variant: "destructive",
-                description: errors[type].toString(),
+                    title: "Make Quizz Failed!",
+                    variant: "destructive",
+                    description: errors[type].toString(),
                 });
                 console.log(errors[type]);
             }
             setCheckedErrors(false);
+            setErrorsFlag(true);
         }
-    
-      }, [errors]);
 
+        }, [errors]);
+
+    useEffect(() => {
+    
+        if(errorsFlag){
+            toast({
+                title: "Question Saved Success!",
+                variant: "success",
+                description: `You have successfully created a question.`,
+            });
+
+            form.reset(); setValue("");
+
+            setErrorsFlag(false);
+        } 
+        else if(isQuestionCreated){
+            
+            toast({
+                title: "Question Saved Success!",
+                variant: "success",
+                description: `You have successfully created a question.`,
+            });
+
+            form.reset(); setValue("");
+
+            setErrorsFlag(false);
+        }
+
+    }, [nrOfQuestions]);
 
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
 
@@ -134,26 +161,39 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCall
             });
         }
 
+        let correctChoice = "";
+
+        switch (value) {
+            case "choice1":
+                correctChoice = data.answer1;
+                break;
+            case "choice2":
+                correctChoice = data.answer2;
+                break;
+            case "choice3":
+                correctChoice = data.answer3;
+                break;
+            default:
+                break;
+        }
+
         try {
             
-            // updateRoom(data.max_players, data.votes_to_skip, roomCode);
-            // setCheckedErrors(true);
+            createQuestion(roomCode, (nrOfQuestions+1), data.question, data.answer1, data.answer2, data.answer3, correctChoice);
+            
+            setCheckedErrors(true);
 
-            // if (updateCallback) {
-            //     updateCallback();
-            // }
-    
         } catch (err) {
             toast({
-                title: "Update Room Failed!",
+                title: "Make Quizz Failed!",
                 variant: "destructive",
                 description: "Something Wrong, try again", // Assuming the error object has a message property
             });
             console.error(err);
         }
 
-
-      }
+    }
+    
 
     const renderQuestion = () => {
         return (
@@ -288,13 +328,15 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCall
             <div className="flex flex-row mt-2">
                 <Button type="button" 
                     className="shad-button_red m-1"
-                    onClick={backCallback}>
+                    onClick={backCallback}
+                >
                     BACK
                 </Button>
 
                 <Button type="button" 
                     className="shad-button_blue m-1"
-                    onClick={saveCallback}>
+                    onClick={() => {form.reset(); setValue("")}}
+                >
                     CLEAR
                 </Button>
 
@@ -309,7 +351,7 @@ const RoomMakeQuizz: React.FC<CreateUpdateRoomProps> = ({ saveCallback, backCall
         <div className="sm:w-420 flex-center flex-col">
 
         <h2 className="text-lg text-center font-bold">
-            Question: 1
+            {"Question: " + (nrOfQuestions + 1)}
         </h2>
 
             <Form {...form}>

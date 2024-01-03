@@ -20,8 +20,11 @@ const RoomStart: React.FC<RoomStartProps> = ({isHost}) => {
     const dispatch = useDispatch();
     const { startRoom } = bindActionCreators(roomActionCreators, dispatch);
 
-    const state = useSelector((state: State) => state.roomState);
-    const { errors } = state;
+    const roomState = useSelector((state: State) => state.roomState);
+    const { errors } = roomState;
+
+    const questionState = useSelector((state: State) => state.questionState);
+    const { nrOfQuestions } = questionState;
 
     //------------------------------------------------------------------------------
 
@@ -69,13 +72,22 @@ const RoomStart: React.FC<RoomStartProps> = ({isHost}) => {
     }
 
     const startPressed = () => {
-        startRoomRequest();
+        if(nrOfQuestions > 0) {
+            startRoomRequest();
 
-        toast({
-            title: "Starting Room Success!",
-            variant: "success",
-            description: "Room started succesfully", // Assuming the error object has a message property
-        });
+            toast({
+                title: "Starting Room Success!",
+                variant: "success",
+                description: "Room started succesfully", // Assuming the error object has a message property
+            });
+        }
+        else {
+            toast({
+                title: "Starting Room Failed!",
+                variant: "destructive",
+                description: "Make a Quizz first!", // Assuming the error object has a message property
+            });
+        }
     }
 
     const renderHostDescription = () => {

@@ -1,4 +1,4 @@
-roomCode,question_text,choice1,choice2,choice3,correct_choice
+room_code,question_text,choice1,choice2,choice3,correct_choice
 ADFASS,Who won the FIFA World Cup in 2018?,France,Brazil,Germany,choice1
 ADFASS,Which player has the most goals in the history of the UEFA Champions League?,Cristiano Ronaldo,Lionel Messi,Raul,choice1
 ADFASS,In which country is the football club Barcelona located?,Spain,Italy,Germany,choice1

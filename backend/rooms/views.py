@@ -161,6 +161,21 @@ class StartRoom(APIView):
         
         return Response({"Bad Request":"Room not found"}, status=status.HTTP_400_BAD_REQUEST)
     
+class RoomStatus(APIView):
+    def get(self, request, format=None):
+        if not self.request.session.exists(self.request.session.session_key):
+            return Response({"message": "Session does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            
+        host_id = self.request.session.session_key
+        queryset = Room.objects.filter(host=host_id)
+        
+        if len(queryset) > 0:
+            room = queryset[0]
+            room_status = room.started
+            return Response({"started": room_status}, status=status.HTTP_200_OK)
+        
+        return Response({"message": "Room not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 class EndRoom(APIView):
     def post(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
  
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { roomActionCreators, State} from "@/_state";
+import { roomActionCreators, questionActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast"
 
@@ -23,7 +23,7 @@ import RoomQuestion from "../components/RoomQuestion"
 import RoomStart from "../components/RoomStart"
 import RoomMakeQuizz from "../components/RoomMakeQuizz"
 
-const Room= () => {
+const Room = () => {
 
     const { toast } = useToast()
     const [checkedErrors, setCheckedErrors] = useState(false);
@@ -41,6 +41,7 @@ const Room= () => {
 
     const dispatch = useDispatch();
     const { loadRoomDetails, leaveRoom } = bindActionCreators(roomActionCreators, dispatch);
+    const { deleteQuestion, numberOfQuestions, checkFirstQuestion} = bindActionCreators(questionActionCreators, dispatch);
 
     const state = useSelector((state: State) => state.roomState);
     const { tournament, maxPlayers, votesToSkip, isRoomCreated, isJoinedRoom, isHost, roomStarted, errors} = state;
@@ -84,6 +85,9 @@ const Room= () => {
     useEffect(() => {
         
         loadRoomRequest();
+        numberOfQuestions(code);
+        checkFirstQuestion(code);
+
         setCheckedErrors(true);
 
         if(!messageDisplay) {
@@ -138,8 +142,9 @@ const Room= () => {
         try {
 
             leaveRoom();
-            setLeavedRoom(true);
+            deleteQuestion(code);
 
+            setLeavedRoom(true);
             setCheckedErrors(true);
 
         } catch(err) {
@@ -154,24 +159,11 @@ const Room= () => {
 
     
     const updateCallback = () => {
-        
-        toast({
-            title: "Updated Room Success!",
-            variant: "success",
-            description: `You have successfully updated the room ${code}.`,
-        });
-        
         setShowSettings(false);
     }
 
-    const saveCallback = () => {
-        
-        toast({
-            title: "Question Saved Success!",
-            variant: "success",
-            description: `You have successfully created a question.`,
-        });
-        
+    const backCallback = () => {
+        setShowMakeQuizz(false);
         setShowSettings(false);
     }
 
@@ -259,13 +251,13 @@ const Room= () => {
         <div className="border-t-2 border-white w-full"></div>
 
         {showSettings ? (
-            <RoomSettings updateCallback={updateCallback} backCallback={settingsClick}/>
+            <RoomSettings updateCallback={updateCallback} backCallback={backCallback}/>
         ) : (
             roomStarted ? (
                 <RoomQuestion />
             ) : (
                 showMakeQuizz ? (
-                    <RoomMakeQuizz saveCallback={saveCallback} backCallback={settingsClick}/>
+                    <RoomMakeQuizz backCallback={backCallback}/>
                 ) : (
                     <RoomStart isHost={isHost}/>
                 )

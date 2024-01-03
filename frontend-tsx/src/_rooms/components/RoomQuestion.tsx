@@ -15,14 +15,14 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
  
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { roomActionCreators, State} from "@/_state";
+import { roomActionCreators, questionActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
 import { toast, useToast } from "@/components/ui/use-toast"
 
 
 const FormSchema = z
 .object({
-    question: z.enum(["France", "Argentina", "Spain"], {
+    question: z.enum(["choice1", "choice2", "choice3"], {
         required_error: "You must select an answer to the question above.",
     }),
 })
@@ -31,13 +31,19 @@ const RoomQuestion = () => {
 
     const [skipVote, setSkipVote] = useState(false);
 
+    const [checkedErrors, setCheckedErrors] = useState(false);
+    const [errorsFlag, setErrorsFlag] = useState(false);
+
     //------------------------------------------------------------------------------
 
     const dispatch = useDispatch();
-    const { loadRoomDetails } = bindActionCreators(roomActionCreators, dispatch);
+    const { startQuestion, roomQuestion, currentQuestion} = bindActionCreators(questionActionCreators, dispatch);
 
-    const state = useSelector((state: State) => state.roomState);
-    const { errors} = state;
+    const roomState = useSelector((state: State) => state.roomState);
+    const { roomCode, roomStarted } = roomState;
+
+    const questionState = useSelector((state: State) => state.questionState);
+    const { nrOfQuestions, currentIndex, isQuestionCreated, questionText, choice1, choice2, choice3, correctChoice, isFirstQuestion, errors } = questionState;
 
     //------------------------------------------------------------------------------
 
@@ -48,15 +54,109 @@ const RoomQuestion = () => {
           },
     });
 
+    useEffect(() => {
+        // This useEffect will be triggered whenever 'errors' in the state changes
+        if(checkedErrors){
+            for (let type in errors) {
+                if(type === 'code' || errors[type].toString() ==='[object Object]')
+                    continue;
+                toast({
+                    title: "Make Quizz Failed!",
+                    variant: "destructive",
+                    description: errors[type].toString(),
+                });
+                console.log(errors[type]);
+            }
+            setCheckedErrors(false);
+            setErrorsFlag(true);
+        }
+    
+      }, [errors]);
+
+    useEffect(() => {
+
+        if(roomStarted) {
+            if(!isFirstQuestion) {
+                startQuestionRequest();
+            }
+            else {
+                currentQuestionRequest();
+            }
+        }
+
+    }, []);
+
+    const startQuestionRequest = () => {
+        try {
+
+            startQuestion(roomCode);
+
+        } catch(err) {
+            toast({
+                title: "Start Question Failed!",
+                variant: "destructive",
+                description: "Failed, to load the questions", // Assuming the error object has a message property
+            });
+            console.error(err);
+        }
+    }
+
+    const currentQuestionRequest = () => {
+        try {
+
+            currentQuestion(roomCode);
+
+        } catch(err) {
+            toast({
+                title: "Current Question Failed!",
+                variant: "destructive",
+                description: "Failed, to load the questions", // Assuming the error object has a message property
+            });
+            console.error(err);
+        }
+    }
+
+    const roomQuestionRequest = () => {
+        try {
+
+            roomQuestion(roomCode);
+
+        } catch(err) {
+            toast({
+                title: "Room Question Failed!",
+                variant: "destructive",
+                description: "Failed, to load the questions", // Assuming the error object has a message property
+            });
+            console.error(err);
+        }
+    }
+
     const onSubmit = (data: z.infer<typeof FormSchema>) => {
-        toast({
-          title: "You submitted the following values:",
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-            </pre>
-          ),
-        })
+
+        let correctChoice = "";
+
+        switch (data.question) {
+            case "choice1":
+                correctChoice = choice1;
+                break;
+            case "choice2":
+                correctChoice = choice2;
+                break;
+            case "choice3":
+                correctChoice = choice3;
+                break;
+            default:
+                break;
+        }
+
+        console.log(correctChoice);
+        console.log(currentIndex);
+        console.log(nrOfQuestions);
+        
+        if(currentIndex < nrOfQuestions) {
+            roomQuestionRequest();
+        }
+
     }
 
     const skipClick = () => {
@@ -82,7 +182,7 @@ const RoomQuestion = () => {
             name="question"
             render={({ field }) => (
                 <FormItem className="space-y-3">
-                <FormLabel className="font-bold text-lg">Who won the last world cup tournament...</FormLabel>
+                <FormLabel className="font-bold text-lg">{questionText}</FormLabel>
                 <FormControl className="">
                     <RadioGroup
                     onValueChange={field.onChange}
@@ -91,21 +191,21 @@ const RoomQuestion = () => {
                     >
                         <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                            <RadioGroupItem value="France" />
+                            <RadioGroupItem value="choice1" />
                             </FormControl>
-                            <FormLabel className="font-normal text-lg">France</FormLabel>
+                            <FormLabel className="font-normal text-lg">{choice1}</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                            <RadioGroupItem value="Argentina" />
+                            <RadioGroupItem value="choice2" />
                             </FormControl>
-                            <FormLabel className="font-normal text-lg">Argentina</FormLabel>
+                            <FormLabel className="font-normal text-lg">{choice2}</FormLabel>
                         </FormItem>
                         <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl>
-                            <RadioGroupItem value="Spain" />
+                            <RadioGroupItem value="choice3" />
                             </FormControl>
-                            <FormLabel className="font-normal text-lg">Spain</FormLabel>
+                            <FormLabel className="font-normal text-lg">{choice3}</FormLabel>
                         </FormItem>
                     </RadioGroup>
                 </FormControl>

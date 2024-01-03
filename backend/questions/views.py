@@ -46,7 +46,7 @@ class PopulateQuestions(APIView):
 
                 if not Question.objects.filter(question_text=question_text).exists():
                     question = Question(
-                        roomCode=row['roomCode'],
+                        room_code=row['room_code'],
                         question_text=question_text,
                         choice1=row['choice1'],
                         choice2=row['choice2'],
@@ -133,7 +133,7 @@ class RoomQuestion(APIView):
         else:
             return queryset.filter(id__gt=current_question_id).first()
         
-class StartRoom(APIView):
+class StartQuestion(APIView):
     def get(self, request, room_code, *args, **kwargs):
         
         request.session.pop(f'{room_code}_current_question_id', None)
@@ -147,3 +147,69 @@ class StartRoom(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"message": "No questions available for this room"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CurrentQuestion(APIView):
+    def get(self, request, room_code, *args, **kwargs):
+        current_question_id = request.session.get(f'{room_code}_current_question_id')
+        
+        if current_question_id is not None:
+            current_question = Question.objects.get(id=current_question_id)
+            serializer = QuestionSerializer(current_question)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "No current question available for this room"}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteQuestion(APIView):
+    def delete(self, request, room_code, *args, **kwargs):
+        try:
+            Question.objects.filter(room_code=room_code).delete()
+            return Response({"Success": "Questions deleted successfully"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Exception: ", e)
+            return Response({"Error": "Questions not deleted..."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class NrOfQuestionsInRoom(APIView):
+    def get(self, request, room_code, format=None):
+        nr_of_questions = Question.objects.filter(room_code=room_code).count()
+        return Response({"nr_of_questions": nr_of_questions}, status=status.HTTP_200_OK)
+    
+
+class CheckCurrentQuestion(APIView):
+    def get(self, request, room_code, *args, **kwargs):
+        current_question_id = request.session.get(f'{room_code}_current_question_id')
+
+        if current_question_id is not None:
+            return Response({"exists": True, "current_question_id": current_question_id}, status=status.HTTP_200_OK)
+        else:
+            return Response({"exists": False, "message": "No current question in session for this room"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class UpdateQuestionPoints(APIView):
+    def post(self, request, room_code, current_index, *args, **kwargs):
+        try:
+            # Retrieve the question based on the room code and current index
+            question = Question.objects.get(room_code=room_code, current_index=current_index)
+
+            print("Question: ", question)
+
+            # Check if the provided answer is correct
+            is_correct = question.is_correct(request.data.get('answer'))
+
+            # Update the score based on correctness (0 for incorrect, 10 for correct)
+            question.points = 10 if is_correct else 0
+            question.save()
+            
+            print("aici")
+
+            # Optionally, you can return the updated question details
+            serializer = QuestionSerializer(question)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Question.DoesNotExist:
+            return Response({"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            print("Exception: ", e)
+            return Response({"error": "Failed to update question score"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
