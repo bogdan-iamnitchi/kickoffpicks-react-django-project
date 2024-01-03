@@ -8,7 +8,7 @@ import { SigninForm, SignupForm, ResetPassword, ResetPasswordConfirm, GitHub, Go
 import RootLayout from './_root/RootLayout'
 
 import { Home, ChatAuth } from './_root/pages'
-import { CreateRoom, JoinRoom, Room, RoomsHome } from './_rooms/pages'
+import { CreateUpdateRoom, JoinRoom, Room, RoomsHome } from './_rooms/pages'
 
 const App = () => {
 
@@ -29,9 +29,9 @@ const App = () => {
 
             <Route element={<RootLayout />}>
                 <Route path='/rooms-home' element={<RoomsHome />} />
-                <Route path='/create-room' element={<CreateRoom />} />
+                <Route path='/create-update-room' element={<CreateUpdateRoom />} />
                 <Route path='/join-room' element={<JoinRoom />} />
-                <Route path='/room/:roomCode' element={<Room />} />
+                <Route path='/room/:code' element={<Room />} />
                 
             </Route>
 

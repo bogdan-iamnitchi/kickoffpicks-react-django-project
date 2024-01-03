@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators} from "@/_state";
+import { authActionCreators} from "@/_state";
 
 
 const Home = () => {
 
   const dispatch = useDispatch();
-  const { logout } = bindActionCreators(actionCreators, dispatch);
+  const { logout } = bindActionCreators(authActionCreators, dispatch);
 
   return (
     <>

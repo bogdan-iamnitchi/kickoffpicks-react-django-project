@@ -6,10 +6,9 @@ import { Navigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { actionCreators } from "@/_state";
+import { authActionCreators } from "@/_state";
 import { useState } from "react";
 
-const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/logo.svg";
 
 const VerifyAccount = () => {
 
@@ -32,7 +31,7 @@ const VerifyAccount = () => {
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
-  const { verify } = bindActionCreators(actionCreators, dispatch);
+  const { verify } = bindActionCreators(authActionCreators, dispatch);
 
   //------------------------------------------------------------------------------
 
@@ -49,7 +48,6 @@ const VerifyAccount = () => {
 
   return (
       <>
-        <img src={imagePath} alt="logo" />
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Verify Account

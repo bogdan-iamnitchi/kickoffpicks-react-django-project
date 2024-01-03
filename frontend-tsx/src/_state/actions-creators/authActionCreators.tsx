@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Dispatch } from "redux";
-import { ActionType} from "../actions-types/types";
-import { Action } from "../actions-types/index";
+import { AuthActionType} from "../actions-types/auth/types";
+import { AuthAction } from "../actions-types/auth/index";
 
-export const chat_engine_signin = (username: string, secret: string) => async (dispatch: Dispatch<Action>) => {
+export const chat_engine_signin = (username: string, secret: string) => async (dispatch: Dispatch<AuthAction>) => {
     const config = {
         headers: {
             "Project-ID": import.meta.env.VITE_APP_CHAT_ENGINE_PROJECT_ID,
@@ -12,7 +12,6 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         }
     };
     
-    // console.log(username, secret);
 
     try {
         const res = await axios.get(
@@ -21,25 +20,24 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         );
 
         dispatch({
-            type: ActionType.CHAT_ENGINE_LOGIN_SUCCESS,
+            type: AuthActionType.CHAT_ENGINE_LOGIN_SUCCESS,
             payload: res.data
         });
 
         dispatch<any>(load_user());
 
     } catch (err) {
-        // console.log(err);
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({
-                    type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                    type: AuthActionType.CHAT_ENGINE_LOGIN_FAIL,
                     errors: err.response.data
                 });
             }
         }
         else {
             dispatch({
-                type: ActionType.CHAT_ENGINE_LOGIN_FAIL,
+                type: AuthActionType.CHAT_ENGINE_LOGIN_FAIL,
                 errors: []
             });
         }
@@ -53,7 +51,7 @@ export const chat_engine_signup = (
     email: string, 
     first_name: string, 
     last_name: string, 
-) => async (dispatch: Dispatch<Action>) => {
+) => async (dispatch: Dispatch<AuthAction>) => {
 
     const config = {
         headers: {
@@ -78,21 +76,21 @@ export const chat_engine_signup = (
         );
 
         dispatch({
-            type: ActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
+            type: AuthActionType.CHAT_ENGINE_SIGNUP_SUCCESS,
             payload: res.data
         });
 
     }
     catch (err) {
         dispatch({
-            type: ActionType.CHAT_ENGINE_SIGNUP_FAIL,
+            type: AuthActionType.CHAT_ENGINE_SIGNUP_FAIL,
             errors: []
         });
 
     }
 };
 
-export const load_user = () => async (dispatch: Dispatch<Action>) => {
+export const load_user = () => async (dispatch: Dispatch<AuthAction>) => {
 
     const config = {
         headers: {
@@ -111,19 +109,19 @@ export const load_user = () => async (dispatch: Dispatch<Action>) => {
             );
     
             dispatch({
-                type: ActionType.USER_LOADED_SUCCESS,
+                type: AuthActionType.USER_LOADED_SUCCESS,
                 payload: res.data
             });
     
         } catch (err) {
             dispatch({
-                type: ActionType.USER_LOADED_FAIL
+                type: AuthActionType.USER_LOADED_FAIL
             });
         }
     }
     else {
         dispatch({
-            type: ActionType.USER_LOADED_FAIL
+            type: AuthActionType.USER_LOADED_FAIL
         });
     }
 };
@@ -137,7 +135,7 @@ export const signup = (
     email: string, 
     password: string, 
     re_password: string
-) => async (dispatch: Dispatch<Action>) => {
+) => async (dispatch: Dispatch<AuthAction>) => {
 
     const config = {
         headers: {
@@ -155,7 +153,7 @@ export const signup = (
         );
 
         dispatch({
-            type: ActionType.SIGNUP_SUCCESS,
+            type: AuthActionType.SIGNUP_SUCCESS,
             payload: res.data
         });
 
@@ -168,14 +166,14 @@ export const signup = (
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({
-                    type: ActionType.SIGNUP_FAIL,
+                    type: AuthActionType.SIGNUP_FAIL,
                     errors: err.response.data
                 });
             }
         }
         else {
             dispatch({
-                type: ActionType.SIGNUP_FAIL,
+                type: AuthActionType.SIGNUP_FAIL,
                 errors: []
             });
         }
@@ -183,7 +181,7 @@ export const signup = (
     }
 };
 
-export const signin = (email: string, password: string) => async (dispatch: Dispatch<Action>) => {
+export const signin = (email: string, password: string) => async (dispatch: Dispatch<AuthAction>) => {
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -202,7 +200,7 @@ export const signin = (email: string, password: string) => async (dispatch: Disp
         );
         
         dispatch({
-            type: ActionType.LOGIN_SUCCESS,
+            type: AuthActionType.LOGIN_SUCCESS,
             payload: res.data
         });
 
@@ -213,14 +211,14 @@ export const signin = (email: string, password: string) => async (dispatch: Disp
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({
-                    type: ActionType.LOGIN_FAIL,
+                    type: AuthActionType.LOGIN_FAIL,
                     errors: err.response.data
                 });
             }
         }
         else {
             dispatch({
-                type: ActionType.LOGIN_FAIL,
+                type: AuthActionType.LOGIN_FAIL,
                 errors: []
             });
         }
@@ -228,7 +226,7 @@ export const signin = (email: string, password: string) => async (dispatch: Disp
 
 };
 
-export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>) => {
+export const googleAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<AuthAction>) => {
     if (state && code && !localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -247,7 +245,7 @@ export const googleAuthenticate = (state: string, code: string) => async (dispat
             const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/google-oauth2/?${formBody}`, config);
 
             dispatch({
-                type: ActionType.GOOGLE_AUTH_SUCCESS,
+                type: AuthActionType.GOOGLE_AUTH_SUCCESS,
                 payload: res.data
             });
 
@@ -258,14 +256,14 @@ export const googleAuthenticate = (state: string, code: string) => async (dispat
             if (axios.isAxiosError(err)) {
                 if(err.response?.data) {
                     dispatch({
-                        type: ActionType.GOOGLE_AUTH_FAIL,
+                        type: AuthActionType.GOOGLE_AUTH_FAIL,
                         errors: err.response.data
                     });
                 }
             }
             else {
                 dispatch({
-                    type: ActionType.GOOGLE_AUTH_FAIL,
+                    type: AuthActionType.GOOGLE_AUTH_FAIL,
                     errors: []
                 });
             }
@@ -273,7 +271,7 @@ export const googleAuthenticate = (state: string, code: string) => async (dispat
     }
 };
 
-export const githubAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<Action>)  => {
+export const githubAuthenticate = (state: string, code: string) => async (dispatch: Dispatch<AuthAction>)  => {
     if (state && code && !localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -292,7 +290,7 @@ export const githubAuthenticate = (state: string, code: string) => async (dispat
             const res = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/o/github/?${formBody}`, config);
 
             dispatch({
-                type: ActionType.GITHUB_AUTH_SUCCESS,
+                type: AuthActionType.GITHUB_AUTH_SUCCESS,
                 payload: res.data
             });
 
@@ -303,14 +301,14 @@ export const githubAuthenticate = (state: string, code: string) => async (dispat
             if (axios.isAxiosError(err)) {
                 if(err.response?.data) {
                     dispatch({
-                        type: ActionType.GITHUB_AUTH_FAIL,
+                        type: AuthActionType.GITHUB_AUTH_FAIL,
                         errors: err.response.data
                     });
                 }
             }
             else {
                 dispatch({
-                    type: ActionType.GITHUB_AUTH_FAIL,
+                    type: AuthActionType.GITHUB_AUTH_FAIL,
                     errors: []
                 });
             }
@@ -318,7 +316,7 @@ export const githubAuthenticate = (state: string, code: string) => async (dispat
     }
 };
 
-export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
+export const checkAuthenticated = () => async (dispatch: Dispatch<AuthAction>) => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -334,30 +332,30 @@ export const checkAuthenticated = () => async (dispatch: Dispatch<Action>) => {
 
             if (res.data.code !== 'token_not_valid') {
                 dispatch({
-                    type: ActionType.AUTHENTICATED_SUCCESS
+                    type: AuthActionType.AUTHENTICATED_SUCCESS
                 });
 
                 dispatch<any>(load_user());
 
             } else {
                 dispatch({
-                    type: ActionType.AUTHENTICATED_FAIL
+                    type: AuthActionType.AUTHENTICATED_FAIL
                 });
             }
         } catch (err) {
             dispatch({
-                type: ActionType.AUTHENTICATED_FAIL
+                type: AuthActionType.AUTHENTICATED_FAIL
             });
         }
 
     } else {
         dispatch({
-            type: ActionType.AUTHENTICATED_FAIL
+            type: AuthActionType.AUTHENTICATED_FAIL
         });
     }
 };
 
-export const verify = (uid: string, token: string) => async (dispatch: Dispatch<Action>) => {
+export const verify = (uid: string, token: string) => async (dispatch: Dispatch<AuthAction>) => {
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -374,12 +372,12 @@ export const verify = (uid: string, token: string) => async (dispatch: Dispatch<
         );
 
         dispatch({
-            type: ActionType.ACTIVATION_SUCCESS
+            type: AuthActionType.ACTIVATION_SUCCESS
         });
 
     } catch (err) {
         dispatch({
-            type: ActionType.ACTIVATION_FAIL
+            type: AuthActionType.ACTIVATION_FAIL
         });
     }
 
@@ -387,7 +385,7 @@ export const verify = (uid: string, token: string) => async (dispatch: Dispatch<
 
 
 
-export const reset_password = (email: string) => async (dispatch: Dispatch<Action>) => {
+export const reset_password = (email: string) => async (dispatch: Dispatch<AuthAction>) => {
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -404,12 +402,12 @@ export const reset_password = (email: string) => async (dispatch: Dispatch<Actio
         );
 
         dispatch({
-            type: ActionType.PASSWORD_RESET_SUCCESS
+            type: AuthActionType.PASSWORD_RESET_SUCCESS
         });
 
     } catch (err) {
         dispatch({
-            type: ActionType.PASSWORD_RESET_FAIL
+            type: AuthActionType.PASSWORD_RESET_FAIL
         });
     }
 
@@ -420,7 +418,7 @@ export const reset_password_confirm = (
     token: string, 
     new_password: string, 
     re_new_password: string
-) => async (dispatch: Dispatch<Action>) => {
+) => async (dispatch: Dispatch<AuthAction>) => {
 
     const config = {
         headers: {
@@ -438,19 +436,19 @@ export const reset_password_confirm = (
         );
 
         dispatch({
-            type: ActionType.PASSWORD_RESET_CONFIRM_SUCCESS
+            type: AuthActionType.PASSWORD_RESET_CONFIRM_SUCCESS
         });
 
     } catch (err) {
         dispatch({
-            type: ActionType.PASSWORD_RESET_CONFIRM_FAIL
+            type: AuthActionType.PASSWORD_RESET_CONFIRM_FAIL
         });
     }
 
 }
 
-export const logout = () => async (dispatch: Dispatch<Action>) => {
+export const logout = () => async (dispatch: Dispatch<AuthAction>) => {
     dispatch({
-        type: ActionType.LOGOUT
+        type: AuthActionType.LOGOUT
     });
 }

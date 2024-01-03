@@ -3,7 +3,7 @@ import { PrettyChatWindow } from "react-chat-engine-pretty";
 interface ChatProps {
     email: string;
     secret: string;
-  }
+}
 
 const Chat: React.FC<ChatProps> = ({email, secret}) => {
 

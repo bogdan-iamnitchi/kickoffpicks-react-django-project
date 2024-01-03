@@ -13,8 +13,12 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
     
+    #questions
+    path('questions-api/', include('questions.urls')),
+    
     # rooms
-    path('rooms/', include('rooms.urls')),
+    path('rooms-api/', include('rooms.urls')),
+    
 ]
 
 urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

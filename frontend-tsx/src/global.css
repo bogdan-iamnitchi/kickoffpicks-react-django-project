@@ -287,6 +287,10 @@
     @apply bg-blue-800 hover:bg-blue-700 text-light-1 flex gap-2 !important;
   }
 
+  .shad-button_purple {
+    @apply bg-purple-800 hover:bg-purple-700 text-light-1 flex gap-2 !important;
+  }
+
   .shad-button_dark_4 {
     @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 !important;
   }

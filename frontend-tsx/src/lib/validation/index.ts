@@ -2,11 +2,11 @@ import * as z from "zod"
 
 export const SignupValidation = z
 .object({
-    firstName: z.string().min(6, {
-        message: "First Name must contain at least 6 character(s)"
+    firstName: z.string().min(1, {
+        message: "Please provide your first name."
     }),
-    lastName: z.string().min(6, {
-        message: "Last Name must contain at least 6 character(s)"
+    lastName: z.string().min(1, {
+        message: "Please provide your last name."
     }),
     email: z.string().email({
         message: "Provided email is not valid."

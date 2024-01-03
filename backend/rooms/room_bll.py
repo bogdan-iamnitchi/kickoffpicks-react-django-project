@@ -17,19 +17,22 @@ def create_or_update_room_bll(request, serializer_class):
     serializer = serializer_class(data=request.data)
     if serializer.is_valid():
         host = request.session.session_key
+        
+        tournament = serializer.data.get('tournament')
         max_players = serializer.data.get('max_players')
         votes_to_skip = serializer.data.get('votes_to_skip')
         
         rooms = get_room_by_host(host)
         if len(rooms) > 0:
             room = rooms[0]
-            
             request.session["room_code"] = room.code
+            
+            room.tournament = tournament
             room.max_players = max_players
             room.votes_to_skip = votes_to_skip
-            room.save(update_fields=['max_players', 'votes_to_skip'])
+            room.save(update_fields=['tournament', 'max_players', 'votes_to_skip'])
         else:
-            room = Room(host=host, max_players=max_players, votes_to_skip=votes_to_skip)
+            room = Room(host=host, tournament=tournament, max_players=max_players, votes_to_skip=votes_to_skip)
             request.session["room_code"] = room.code
             room.save()
         return room

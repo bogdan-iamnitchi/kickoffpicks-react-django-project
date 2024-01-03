@@ -2,16 +2,16 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { AuthState, actionCreators } from "@/_state";
+import { State, authActionCreators } from "@/_state";
 
 const imagePath = import.meta.env.VITE_APP_STATIC_PATH + "/assets/images/side-img.svg";
 
 export default function AuthLayout() {
 
   const dispatch = useDispatch();
-  const { checkAuthenticated } = bindActionCreators(actionCreators, dispatch);
+  const { checkAuthenticated } = bindActionCreators(authActionCreators, dispatch);
 
-  const state = useSelector((state: AuthState) => state.authState);
+  const state = useSelector((state: State) => state.authState);
   const { isAuthenticated } = state;
 
 
