@@ -80,6 +80,16 @@ interface AnswerQuestionFailAction {
     errors: any
 }
 
+interface FinalScoreSuccessAction {
+    type: QuestionActionType.FINAL_SCORE_SUCCESS,
+    payload: any
+}
+
+interface FinalScoreFailAction {
+    type: QuestionActionType.FINAL_SCORE_FAIL,
+    errors: any
+}
+
 export type QuestionAction = 
     CreateQuestionSuccessAction
     | CreateQuestionFailAction
@@ -95,9 +105,12 @@ export type QuestionAction =
     | NrOfQuestionsFailAction
     | FirstQuestionSuccessAction
     | FirstQuestionFailAction
-    
+
     | AnswerQuestionSuccessAction
     | AnswerQuestionFailAction
+
+    | FinalScoreSuccessAction
+    | FinalScoreFailAction
     
 
 
@@ -114,6 +127,8 @@ export type QuestionState = {
     choice3: string,
     correctChoice: string,
 
+    score: number,
+    isFinal: boolean,
     isFirstQuestion: false,
 
     errors: Errors,

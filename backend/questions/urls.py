@@ -15,6 +15,7 @@ urlpatterns = [
     path('delete-question/<str:room_code>', DeleteQuestion.as_view()),
     
     path('answer-question/<str:room_code>/<int:current_index>', UpdateQuestionPoints.as_view()),
+    path('final-score-question/<str:room_code>', FinalScore.as_view()),
     
     path('first-question/<str:room_code>', CheckCurrentQuestion.as_view()),
     path('nr-of-questions/<str:room_code>', NrOfQuestionsInRoom.as_view()),

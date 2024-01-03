@@ -324,7 +324,56 @@ export const checkFirstQuestion = (roomCode: string) => async (dispatch: Dispatc
 };
 
 
-export const answerQuestion = (currentIndex: string, roomCode: string, answer: string) => async (dispatch: Dispatch<QuestionAction>) => {
+export const answerQuestion = (roomCode: string, currentIndex: string,  answer: string, passQuestion: boolean) => async (dispatch: Dispatch<QuestionAction>) => {
+
+    const config = {
+        headers: {
+            "Authorization": `JWT ${localStorage.getItem('access')}`,
+        },
+        withCredentials: true,
+    };
+
+    const body = {
+        "answer": answer,
+        "pass_question": passQuestion
+    }
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_APP_API_URL}/questions-api/answer-question/${roomCode}/${currentIndex}`,
+            body,
+            config
+        );
+        
+        // console.log(res.data);
+
+        dispatch({
+            type: QuestionActionType.ANSWER_QUESTION_SUCCESS,
+            payload: res.data
+        });
+
+        console.log(res.data.code);
+
+    } catch (err) {
+        if (axios.isAxiosError(err)) {
+            if(err.response?.data) {
+                dispatch({
+                    type: QuestionActionType.ANSWER_QUESTION_FAIL,
+                    errors: err.response.data
+                });
+            }
+        }
+        else {
+            dispatch({
+                type: QuestionActionType.ANSWER_QUESTION_FAIL,
+                errors: []
+            });
+        }
+    }
+
+};
+
+export const finalScore = (roomCode: string) => async (dispatch: Dispatch<QuestionAction>) => {
 
     const config = {
         headers: {
@@ -335,14 +384,14 @@ export const answerQuestion = (currentIndex: string, roomCode: string, answer: s
 
     try {
         const res = await axios.get(
-            `${import.meta.env.VITE_APP_API_URL}/questions-api/first-question/${roomCode}`,
+            `${import.meta.env.VITE_APP_API_URL}/questions-api/final-score-question/${roomCode}`,
             config
         );
         
         // console.log(res.data);
 
         dispatch({
-            type: QuestionActionType.FIRST_QUESTION_SUCCESS,
+            type: QuestionActionType.FINAL_SCORE_SUCCESS,
             payload: res.data
         });
 
@@ -352,14 +401,14 @@ export const answerQuestion = (currentIndex: string, roomCode: string, answer: s
         if (axios.isAxiosError(err)) {
             if(err.response?.data) {
                 dispatch({
-                    type: QuestionActionType.FIRST_QUESTION_FAIL,
+                    type: QuestionActionType.FINAL_SCORE_FAIL,
                     errors: err.response.data
                 });
             }
         }
         else {
             dispatch({
-                type: QuestionActionType.FIRST_QUESTION_FAIL,
+                type: QuestionActionType.FINAL_SCORE_FAIL,
                 errors: []
             });
         }

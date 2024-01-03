@@ -27,8 +27,6 @@ class Question(models.Model):
         }.get(self.correct_choice, None)
         
     def is_correct(self, user_answer):
-        print("user_answer: ", user_answer)
-        print("correct_choice: ", self.correct_choice)
         return user_answer == self.correct_choice
 
     def __str__(self):

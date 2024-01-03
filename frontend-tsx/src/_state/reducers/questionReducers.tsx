@@ -12,6 +12,8 @@ const initialState: QuestionState = {
     choice3: '',
     correctChoice: '',
 
+    score: 0,
+    isFinal: false,
     isFirstQuestion: false,
 
     errors: []
@@ -44,6 +46,7 @@ const questionReducer = (state: QuestionState = initialState, action: QuestionAc
             nrOfQuestions: initialState.nrOfQuestions,
             isQuestionCreated: false,
             isFirstQuestion: false,
+            isFinal: false,
 
             errors: []
         }
@@ -68,6 +71,7 @@ const questionReducer = (state: QuestionState = initialState, action: QuestionAc
             correctChoice: action.payload.correct_choice,
 
             isFirstQuestion: true, 
+            isFinal: false,
         }
 
 
@@ -104,9 +108,19 @@ const questionReducer = (state: QuestionState = initialState, action: QuestionAc
         return {
             ...state,
 
-            isFirstQuestion: action.payload.exists
+            isFirstQuestion: action.payload.exists,
         }
 
+    case QuestionActionType.FINAL_SCORE_SUCCESS:
+        return {
+            ...state,
+
+            score: action.payload.final_score,
+            isFinal: true
+        }
+
+
+    case QuestionActionType.FINAL_SCORE_FAIL:
     case QuestionActionType.NR_OF_QUESTIONS_FAIL:
     case QuestionActionType.CURRENT_QUESTION_FAIL:
     case QuestionActionType.ROOM_QUESTION_FAIL:

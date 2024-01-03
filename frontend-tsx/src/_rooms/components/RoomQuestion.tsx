@@ -15,9 +15,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
  
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { roomActionCreators, questionActionCreators, State} from "@/_state";
+import { questionActionCreators, State} from "@/_state";
 import { useEffect, useState } from "react";
-import { toast, useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 
 
 const FormSchema = z
@@ -29,21 +29,22 @@ const FormSchema = z
 
 const RoomQuestion = () => {
 
+    const { toast } = useToast()
+
     const [skipVote, setSkipVote] = useState(false);
 
     const [checkedErrors, setCheckedErrors] = useState(false);
-    const [errorsFlag, setErrorsFlag] = useState(false);
 
     //------------------------------------------------------------------------------
 
     const dispatch = useDispatch();
-    const { startQuestion, roomQuestion, currentQuestion} = bindActionCreators(questionActionCreators, dispatch);
+    const { startQuestion, roomQuestion, currentQuestion, answerQuestion, finalScore } = bindActionCreators(questionActionCreators, dispatch);
 
     const roomState = useSelector((state: State) => state.roomState);
     const { roomCode, roomStarted } = roomState;
 
     const questionState = useSelector((state: State) => state.questionState);
-    const { nrOfQuestions, currentIndex, isQuestionCreated, questionText, choice1, choice2, choice3, correctChoice, isFirstQuestion, errors } = questionState;
+    const { nrOfQuestions, currentIndex, questionText, choice1, choice2, choice3, isFirstQuestion, errors } = questionState;
 
     //------------------------------------------------------------------------------
 
@@ -68,7 +69,6 @@ const RoomQuestion = () => {
                 console.log(errors[type]);
             }
             setCheckedErrors(false);
-            setErrorsFlag(true);
         }
     
       }, [errors]);
@@ -149,12 +149,14 @@ const RoomQuestion = () => {
                 break;
         }
 
-        console.log(correctChoice);
-        console.log(currentIndex);
-        console.log(nrOfQuestions);
-        
+        answerQuestion(roomCode, currentIndex, correctChoice, false);
+
         if(currentIndex < nrOfQuestions) {
             roomQuestionRequest();
+        }
+
+        if(currentIndex === nrOfQuestions){
+            finalScore(roomCode);
         }
 
     }
@@ -164,6 +166,13 @@ const RoomQuestion = () => {
     }
 
     const passClick = () => {
+
+        answerQuestion(roomCode, currentIndex, "", true);
+
+        if(currentIndex < nrOfQuestions) {
+            roomQuestionRequest();
+        }
+
         toast({
             title: "Pass Success!",
             variant: "success",

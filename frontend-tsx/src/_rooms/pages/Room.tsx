@@ -22,6 +22,7 @@ import RoomSettings from "../components/RoomSettings"
 import RoomQuestion from "../components/RoomQuestion"
 import RoomStart from "../components/RoomStart"
 import RoomMakeQuizz from "../components/RoomMakeQuizz"
+import RoomFinal from "../components/RoomFinal"
 
 const Room = () => {
 
@@ -43,8 +44,11 @@ const Room = () => {
     const { loadRoomDetails, leaveRoom } = bindActionCreators(roomActionCreators, dispatch);
     const { deleteQuestion, numberOfQuestions, checkFirstQuestion} = bindActionCreators(questionActionCreators, dispatch);
 
-    const state = useSelector((state: State) => state.roomState);
-    const { tournament, maxPlayers, votesToSkip, isRoomCreated, isJoinedRoom, isHost, roomStarted, errors} = state;
+    const roomState = useSelector((state: State) => state.roomState);
+    const { tournament, maxPlayers, votesToSkip, isRoomCreated, isJoinedRoom, isHost, roomStarted, errors} = roomState;
+
+    const questionState = useSelector((state: State) => state.questionState);
+    const { isFinal } = questionState;
 
     //------------------------------------------------------------------------------
 
@@ -254,7 +258,13 @@ const Room = () => {
             <RoomSettings updateCallback={updateCallback} backCallback={backCallback}/>
         ) : (
             roomStarted ? (
-                <RoomQuestion />
+
+                isFinal ? (
+                    <RoomFinal isHost={isHost}/>
+                ) : (
+                    <RoomQuestion />
+                )
+
             ) : (
                 showMakeQuizz ? (
                     <RoomMakeQuizz backCallback={backCallback}/>
@@ -273,12 +283,20 @@ const Room = () => {
                 <>
                     {renderRoomDetails()}
 
-                    <Button type="button" 
-                    className="shad-button_green w-420"
-                    onClick={makeQuizzClick}
-                    >
-                        {showMakeQuizz ? "CLOSE MAKE QUIZZ" : "MAKE QUIZZ"}
-                    </Button>
+                    {roomStarted ? (
+                        null
+                    ) : (
+                        <>
+                            <Button type="button" 
+                            className="shad-button_green w-420"
+                            onClick={makeQuizzClick}
+                            >
+                                {showMakeQuizz ? "CLOSE MAKE QUIZZ" : "MAKE QUIZZ"}
+                            </Button>
+
+                            
+                        </>
+                    )}
 
                     <Button type="button" 
                     className={showSettings ? "shad-button_primary w-420" : "shad-button_primary w-420" } 
@@ -286,8 +304,7 @@ const Room = () => {
                     >
                         {showSettings ? "CLOSE SETTINGS" : "SHOW SETTINGS"}
                     </Button>
-
-                    
+                
                 </>
             ) : (<></>)}
 

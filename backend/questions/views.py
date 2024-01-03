@@ -189,21 +189,21 @@ class CheckCurrentQuestion(APIView):
 class UpdateQuestionPoints(APIView):
     def post(self, request, room_code, current_index, *args, **kwargs):
         try:
-            # Retrieve the question based on the room code and current index
             question = Question.objects.get(room_code=room_code, current_index=current_index)
 
-            print("Question: ", question)
+            passQuestion = request.data.get('pass_question')
+            if(passQuestion):
+                question.points = 0
+                question.save()
+                serializer = QuestionSerializer(question)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+                
 
-            # Check if the provided answer is correct
             is_correct = question.is_correct(request.data.get('answer'))
 
-            # Update the score based on correctness (0 for incorrect, 10 for correct)
             question.points = 10 if is_correct else 0
             question.save()
-            
-            print("aici")
 
-            # Optionally, you can return the updated question details
             serializer = QuestionSerializer(question)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -213,3 +213,19 @@ class UpdateQuestionPoints(APIView):
         except Exception as e:
             print("Exception: ", e)
             return Response({"error": "Failed to update question score"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        
+class FinalScore(APIView):
+    def get(self, request, room_code, *args, **kwargs):
+        try:
+            # Retrieve all questions for the given room code
+            questions = Question.objects.filter(room_code=room_code)
+
+            # Calculate the final score by summing up individual question scores
+            final_score = sum(question.points for question in questions)
+
+            return Response({"final_score": final_score}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print("Exception: ", e)
+            return Response({"error": "Failed to calculate final score"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
