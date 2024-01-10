@@ -183,6 +183,15 @@ const SigninForm = () => {
             Sign up
           </Link>
         </p>
+        
+        <p className="text-small-regular text-light-2  text-sm text-center mt-1">
+          Go back?
+          <Link
+            to="/"
+            className="text-primary-500 text-sm font-medium ml-1">
+            Home
+          </Link>
+        </p>
           
       </div>
     </Form>

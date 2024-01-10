@@ -222,6 +222,16 @@ const SignupForm = () => {
             Already have an account? 
             <Link to="/sign-in" className="text-primary-500 text-small-semibold ml-1">Log in</Link>
           </p>
+
+          <p className="text-small-regular text-light-2  text-sm text-center mt-1">
+          Go back?
+          <Link
+            to="/"
+            className="text-primary-500 text-sm font-medium ml-1">
+            Home
+          </Link>
+        </p>
+
         </form>
       </div>
     </Form>
