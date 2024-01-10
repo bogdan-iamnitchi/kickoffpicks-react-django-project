@@ -1,5 +1,7 @@
 # KickOffPicks - IS Project 2023
 
+
+
 Setup virtual enviorement:
  - make sure you are in root project folder
  - install virtualenv `pip install virtualenv`
