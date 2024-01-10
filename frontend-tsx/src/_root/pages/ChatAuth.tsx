@@ -28,6 +28,8 @@ const ChatAuth = () => {
   const { toast } = useToast()
   const [checkedErrors, setCheckedErrors] = useState(false);
 
+  const [showChat, setShowChat] = useState(false);
+
   //------------------------------------------------------------------------------
 
   const dispatch = useDispatch();
@@ -40,8 +42,8 @@ const ChatAuth = () => {
   //------------------------------------------------------------------------------
 
   useEffect(() => {
-
-    load_user();
+      // This block will only run on the first page load
+      load_user();
 
   }, []);
 
@@ -78,6 +80,8 @@ const ChatAuth = () => {
       setSecret(values.password);
 
       setCheckedErrors(true);
+
+      setShowChat(true);
   
     } catch (err) {
       toast({
@@ -90,6 +94,10 @@ const ChatAuth = () => {
   }
 
   if (isChatEngineAuthenticated == true) {
+    
+  }
+  
+  if(showChat) {
     return <Chat email={email} secret={secret}/>;
   }
 

@@ -49,7 +49,6 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
     case AuthActionType.GOOGLE_AUTH_FAIL:
     case AuthActionType.GITHUB_AUTH_FAIL:
     case AuthActionType.CHAT_ENGINE_SIGNUP_FAIL:
-    case AuthActionType.CHAT_ENGINE_LOGIN_FAIL:
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
 
@@ -71,8 +70,10 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
                 email: action.payload.email,
                 first_name: action.payload.first_name,
                 last_name: action.payload.last_name,
-            }
+            },
+
         }
+    
 
     case AuthActionType.USER_LOADED_FAIL:
         return {
@@ -83,7 +84,6 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
     case AuthActionType.CHAT_ENGINE_LOGIN_SUCCESS:
         return {
             ...state,
-            //add a new filed with password to the user
             isChatEngineAuthenticated: true,
         }
 
@@ -91,6 +91,12 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
         return {
             ...state,
             isChatEngineAuthenticated: false,
+        }
+    case AuthActionType.CHAT_ENGINE_LOGIN_FAIL:
+        return {
+            ...state,
+            isChatEngineAuthenticated: false,
+            errors: action.errors
         }
 
     case AuthActionType.LOGOUT:
@@ -105,6 +111,8 @@ const authReducer = (state: AuthState = initialState, action: AuthAction) => {
             refresh: null,
             user: null
         }
+
+    
     
     case AuthActionType.PASSWORD_RESET_SUCCESS:
     case AuthActionType.PASSWORD_RESET_FAIL:

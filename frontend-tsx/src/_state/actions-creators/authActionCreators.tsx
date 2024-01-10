@@ -12,6 +12,7 @@ export const chat_engine_signin = (username: string, secret: string) => async (d
         }
     };
     
+    
 
     try {
         const res = await axios.get(
@@ -55,7 +56,7 @@ export const chat_engine_signup = (
 
     const config = {
         headers: {
-            "Private-Key": "be592df0-923c-4c08-a902-c32820e2bc90"
+            "Private-Key": `${import.meta.env.VITE_APP_CHAT_ENGINE_PRIVATE_KEY}`
         }
     };
 
