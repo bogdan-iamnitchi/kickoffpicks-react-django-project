@@ -118,7 +118,7 @@ class RoomQuestion(APIView):
         next_question = self.get_next_question(current_question_id, room_code)
 
         if next_question:
-            request.session[f'{room_code}_current_question_id'] = next_question.id
+            request.session[f'{room_code}_current_question_id'] = current_question_id
 
             serializer = QuestionSerializer(next_question)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -129,7 +129,7 @@ class RoomQuestion(APIView):
         queryset = Question.objects.filter(room_code=room_code)
         
         if current_question_id is None:
-            return queryset.first().id
+            return queryset.first()
         else:
             return queryset.filter(id__gt=current_question_id).first()
         
