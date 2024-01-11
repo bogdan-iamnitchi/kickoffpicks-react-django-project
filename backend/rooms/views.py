@@ -28,12 +28,20 @@ class GetRoom(APIView):
     lookup_url_kwarg = 'code'
     
     def get(self, request, format=None):
+        
+        # if not self.request.session.exists(self.request.session.session_key):
+        #     self.request.session.create()
+        
         code = request.GET.get(self.lookup_url_kwarg)
         if code != None:
             queryset = Room.objects.filter(code=code)
             if len(queryset) > 0:
                 room = queryset[0]
                 data = RoomSerializer(room).data
+                
+                print("self.request.session.session_key: ", self.request.session.session_key)
+                print("room.host: ", room.host)
+                
                 data['is_host'] = self.request.session.session_key == room.host
                 return Response(data, status=status.HTTP_200_OK)
             return Response({"Room Not Found": "Invalid room code."}, status=status.HTTP_404_NOT_FOUND)
@@ -48,9 +56,7 @@ class CreateRoom(APIView):
     def post(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
-            self.request.session.save()
             
-        print("self.request.session.session_key: ", self.request.session.session_key)
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             tournament = serializer.data.get('tournament')
