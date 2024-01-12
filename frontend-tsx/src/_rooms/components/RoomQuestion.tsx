@@ -173,6 +173,10 @@ const RoomQuestion = () => {
             roomQuestionRequest();
         }
 
+        if(currentIndex === nrOfQuestions){
+            finalScore(roomCode);
+        }
+
         toast({
             title: "Pass Success!",
             variant: "success",
